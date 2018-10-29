@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.salem.mapper.Boardmapper">
+
+<select id="select" resultType="org.salem.domain.BoardVO">
+	select * from board where del = 0 order by bno desc limit 0, 10;
+</select>
+
+<insert id="register">
+	insert into board(mno,title,writer,content)
+	values(#{mno},#{title},#{writer},#{content})
+</insert>
+
+<select id="read" resultType="org.salem.domain.BoardVO">
+	select * from board where bno = #{bno}
+</select>
+
+<update id="delete">
+	update board set del = 1 where bno=#{bno}
+</update>
+
+<update id="update">
+	update board set title=#{title}, content=#{content} where bno=#{bno}
+</update>
+
+</mapper>
