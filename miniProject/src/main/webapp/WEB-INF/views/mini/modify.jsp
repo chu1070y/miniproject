@@ -48,7 +48,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Writer</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" name="writer"  value="${read.writer}">
+											<input type="text" class="form-control" readonly="readonly" name="id"  value="${read.id}">
 										</div>
 									</div>
 
@@ -68,21 +68,37 @@
 										<div class="col-lg-offset-2 col-lg-9">
 											
 											<input type="hidden" name="bno" value="${read.bno}">
+											<input type="hidden" id="page" name="page" value="${page.page}">
+											<input type="hidden" id="display" name="display" value="${page.display}">
+											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+											<input type="hidden" id="type" name="type" value="${page.type}">
 											
 											<button type="submit" class="btn btn-primary">수정하기</button>
 											</form>
 											
 											<form action="/mini/delete" method="post">
+											
 											<input type="hidden" name="bno" value="${read.bno}">
+											<input type="hidden" id="display" name="display" value="${page.display}">
+											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+											<input type="hidden" id="type" name="type" value="${page.type}">
+											
 											<button type="submit" class="btn btn-danger">삭제하기</button>
 											</form>
 											
 											<form action="/mini/list">
+											
+											<input type="hidden" id="page" name="page" value="${page.page}">
+											<input type="hidden" id="display" name="display" value="${page.display}">
+											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+											<input type="hidden" id="type" name="type" value="${page.type}">
+											
 											<button type="submit" class="btn btn-default">목록으로</button>
 											</form>
 										</div>
 									</div>
 							</div>
+							
 
 
 						</div>

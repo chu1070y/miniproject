@@ -1,11 +1,13 @@
 package org.salem.controller;
 
 import org.salem.domain.BoardVO;
+import org.salem.domain.PageDTO;
 import org.salem.service.Boardservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,9 +24,13 @@ public class BoardController {
 	Boardservice service;
 	
 	@GetMapping("/list")
-	public void boardList(Model model) {
+	public void boardList(Model model,PageDTO pageDTO) {
 		log.info("list page~~~~~~~~~~~~~~~");
-		model.addAttribute("list", service.getList());
+		
+		pageDTO.setTotal(service.count(pageDTO));
+		
+		model.addAttribute("page", pageDTO);
+		model.addAttribute("list", service.search(pageDTO));
 	}
 	
 	@GetMapping("/register")
@@ -36,7 +42,9 @@ public class BoardController {
 	public String registerPOST(BoardVO vo,RedirectAttributes rttr) {
 		log.info("register post.....................");
 		
-		log.info(vo.getMno());
+		if(vo.getId()==""||vo.getTitle()==""||vo.getContent()==""){
+			return "redirect:/mini/list";
+		}
 		
 		int count = service.register(vo);
 		
@@ -46,35 +54,30 @@ public class BoardController {
 	}
 	
 	@GetMapping({"/read","/modify"})
-	public void read(int bno, Model model) {
+	public void read(@ModelAttribute("page") PageDTO pageDTO, Model model) {
 		log.info("read or modify page~~~~~~~~~~~~~~~");
 		
-		model.addAttribute("read", service.read(bno));
+		model.addAttribute("read", service.read(pageDTO));
 	}
 	
 	@PostMapping("/delete")
-	public String delete(BoardVO vo, RedirectAttributes rttr) {
-		log.info("delete................running");
+	public String delete(PageDTO pageDTO, RedirectAttributes rttr) {
 		
-		int count = service.delete(vo.getBno());
-		log.info("---------------------------"+count);
+		int count = service.delete(pageDTO);
 		
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
 		
-		return "redirect:/mini/list";
+		return pageDTO.getLink("redirect:/mini/list");
 	}
 	
 	@PostMapping("/modify")
-	public String update(BoardVO vo, RedirectAttributes rttr) {
-		log.info("update ................ running");
+	public String update(BoardVO vo, PageDTO pageDTO, RedirectAttributes rttr) {
 		
 		int count = service.update(vo);
-
-		log.info("---------------------------"+count);
 		
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
 		
-		return "redirect:/mini/read?bno="+vo.getBno();
+		return pageDTO.getLink("redirect:/mini/read");
 	}
 	
 	

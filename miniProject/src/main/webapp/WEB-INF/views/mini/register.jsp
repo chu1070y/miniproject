@@ -16,7 +16,8 @@
 				</h3>
 			</div>
 		</div>
-
+		<span class="form-control">주의! 내용이 비어있으면 등록이 되지 않습니다.</span>
+		<br/>
 		<div class="row">
 
 			<div class="col-md-12 portlets">
@@ -47,7 +48,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Writer</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" id="writer" name="writer">
+											<input type="text" class="form-control" id="id" name="id">
 										</div>
 									</div>
 
@@ -66,8 +67,6 @@
 										<!-- Buttons -->
 										<div class="col-lg-offset-2 col-lg-9">
 											
-											<input type="hidden" id="mno" name="mno" value=3>
-											
 											<button type="submit" class="btn btn-primary">등록하기</button>
 											</form>
 											
@@ -77,7 +76,6 @@
 										</div>
 									</div>
 							</div>
-
 
 						</div>
 						<div class="widget-foot">

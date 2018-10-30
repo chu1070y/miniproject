@@ -47,7 +47,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Writer</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" readonly="readonly" value="${read.writer}">
+											<input type="text" class="form-control" readonly="readonly" value="${read.id}">
 										</div>
 									</div>
 
@@ -67,12 +67,22 @@
 										<div class="col-lg-offset-2 col-lg-9">
 											
 											<input type="hidden" id="bno" name="bno" value="${read.bno}">
+											<input type="hidden" id="page" name="page" value="${page.page}">
+											<input type="hidden" id="display" name="display" value="${page.display}">
+											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+											<input type="hidden" id="type" name="type" value="${page.type}">
 											
 											<button type="submit" class="btn btn-primary">수정하기</button>
 											</form>
 											
 											<form action="/mini/list">
-											<button type="submit" class="btn btn-default">목록으로</button>
+											
+											<input type="hidden" id="page" name="page" value="${page.page}">
+											<input type="hidden" id="display" name="display" value="${page.display}">
+											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+											<input type="hidden" id="type" name="type" value="${page.type}">
+											
+											<button type="submit" class="btn btn-default golist">목록으로</button>
 											</form>
 										</div>
 									</div>
@@ -90,7 +100,10 @@
 		</div>
 
 
-
+		<form class="actionform">
+			<input type="hidden" id="page" name="page" value="${page.page}">
+			<input type="hidden" id="display" name="display" value="${page.display}">
+		</form>
 
 
 
@@ -99,3 +112,4 @@
 	</section>
 	<!-- container section start -->
 	<%@include file="../includes/footer.jsp"%>
+	

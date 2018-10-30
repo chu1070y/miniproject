@@ -3,6 +3,7 @@ package org.salem.controller;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.salem.domain.BoardVO;
+import org.salem.domain.PageDTO;
 import org.salem.mapper.Boardmapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,7 +24,10 @@ public class DataSourceTests {
 	@Test
 	public void test1() {
 		log.info("111111");
-		log.info(mapper.select());
+		PageDTO pageDTO = new PageDTO();
+		pageDTO.setSkip(0);
+		pageDTO.setDisplay(10);
+		log.info(mapper.select(pageDTO));
 	}
 	
 	@Test
@@ -32,8 +36,7 @@ public class DataSourceTests {
 		
 		BoardVO vo = new BoardVO();
 		vo.setTitle("°¡¾Ç°¡¾Ç");
-		vo.setMno(1);
-		vo.setWriter("°¡¹«»õ");
+		vo.setId("gaiga");
 		vo.setContent("1!23213");
 		
 		log.info(mapper.register(vo));
@@ -42,13 +45,18 @@ public class DataSourceTests {
 	@Test
 	public void test3() {
 		log.info("3333333333");
-		log.info(mapper.read(3));
+		
+		PageDTO pageDTO = new PageDTO();
+		pageDTO.setBno(3);
+		log.info(mapper.read(pageDTO));
 	}
 
 	@Test
 	public void test4() {
 		log.info("44444444444");
-		log.info(mapper.delete(824));
+		PageDTO pageDTO = new PageDTO();
+		pageDTO.setBno(821);
+		log.info(mapper.delete(pageDTO));
 	}
 	
 	@Test
@@ -60,6 +68,24 @@ public class DataSourceTests {
 		vo.setBno(1017);
 		vo.setContent("1!23213");
 		log.info(mapper.update(vo));
+	}
+	
+	@Test
+	public void test6() {
+		log.info("6666666666666");
+		PageDTO pageDTO = new PageDTO();
+		log.info(mapper.count(pageDTO));
+	}
+	
+	@Test
+	public void test7() {
+		log.info("7777777777777");
+		
+		PageDTO pageDTO = new PageDTO();
+//		pageDTO.setKeyword("a");
+//		pageDTO.setType("tw");
+		
+		log.info(mapper.search(pageDTO));
 	}
 	
 
