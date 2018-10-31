@@ -183,6 +183,11 @@
        	 var keyword = $("#sKeyword").val();
        	 var type =  $(".select").val();
        	 
+       	 if(type == ""){
+       		 alert("카테고리를 입력해주세요.");
+       		 return;
+       	 }
+       	 
        	 $("#keyword").val(keyword);
        	 $("#type").val(type);
        	 $("#page").val(1);

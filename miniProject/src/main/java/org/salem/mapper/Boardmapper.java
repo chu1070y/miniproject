@@ -20,4 +20,6 @@ public interface Boardmapper {
 	public int count(PageDTO pageDTO);
 	
 	public List<BoardVO> search(PageDTO pageDTO);
+	
+	public int key();
 }

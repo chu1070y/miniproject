@@ -5,6 +5,64 @@
 
 <%@include file="../includes/header.jsp"%>
 
+<style>
+
+	.uploadResult{
+		width: 80%;
+		background-color: gray;
+	}
+	
+	.uploadResult ul{
+		display: flex;
+		flex-flow: row;
+		justify-content: center;
+		align-items: center;
+		color: white;
+	}
+	
+	.uploadResult ul li{
+		list-style: none;
+		padding: 20px;
+		align-centent: center;
+		text-align: center;
+	}
+	
+	.uploadResult ul li img{
+	display:inline;
+	height: 100px;
+	}
+	
+	.uploadResult ul li span{
+	color: white;
+	}
+	
+	.bigPictureWrapper{
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+	background: rgba(255,255,255,0.5);
+	}
+	
+	.bigPicture{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	}
+	
+	.bigPicture img{
+	width:600px;
+	}
+
+</style>
+
+
 <!--main content start-->
 <section id="main-content">
 	<section class="wrapper">
@@ -34,8 +92,10 @@
 						<div class="padd">
 
 							<div class="form quick-post">
+							
+							
 								<!-- Edit profile form (not working)-->
-								<form class="form-horizontal" action="/mini/register" method="post">
+								<form class='regform'>
 									<!-- Title -->
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Title</label>
@@ -59,34 +119,64 @@
 											<textarea class="form-control" id="content" name="content"></textarea>
 										</div>
 									</div>
+									</form>
+			
 
+			<br/>
 
-									<!-- Buttons -->
-									<div class="form-group">
+			<div class='col-lg-12 row'>
+			<form action="/mini/list">
+    		<!-- Buttons -->
+			<button type="submit" class="btn btn-primary register">등록하기</button>					
+			
+			<button type="submit" class="btn btn-default">목록으로</button>
+			</form>
+			</div>
 									
-										<!-- Buttons -->
-										<div class="col-lg-offset-2 col-lg-9">
-											
-											<button type="submit" class="btn btn-primary">등록하기</button>
-											</form>
-											
-											<form action="/mini/list">
-											<button type="submit" class="btn btn-default">목록으로</button>
-											</form>
 										</div>
 									</div>
 							</div>
-
 						</div>
+					
 						<div class="widget-foot">
 							<!-- Footer goes here -->
 						</div>
 					</div>
 				</div>
+				
+			
+		
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">첨부파일</div>
+						
+						<div class="panel-body">
+							<div class="uploadDiv col-lg-2">
+								<input type='file' name='uploadfile' multiple>
+							</div>
+							<br/><br/>
+							<div class='uploadResult col-lg-12'>
+								<ul>
+				
+								</ul>
+							</div>
+			
+							<button id='uploadBtn'>Upload</button>
 
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+			
+			
 
+
+
+<div class='bigPictureWrapper'>
+	<div class="bigPicture">
+	</div>
+</div>
 
 
 
@@ -97,3 +187,177 @@
 	</section>
 	<!-- container section start -->
 	<%@include file="../includes/footer.jsp"%>
+	
+
+	
+<script>
+
+function showImage(fileCallPath){
+	//alert(fileCallPath);
+	
+	$(".bigPictureWrapper").css("display","flex").show();
+	$(".bigPicture")
+	.html("<img src='/upload/display?fileName="+ encodeURI(fileCallPath)+"'>")
+	.animate({width:'100%',height:'100%'},1000);
+}
+
+$(document).ready(function(){
+	
+	//이미지 삭제
+	$(".uploadResult").on("click","button",function(e){
+		
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
+		
+		var targetLi = $(this).closest("li");
+
+		$.ajax({
+			url: '/upload/deleteFile',
+			data: {fileName: targetFile, type:type},
+			dataType:'text',
+			type:'POST',
+			success: function(result){
+				targetLi.remove();
+			}
+		});
+	});
+	
+	//이미지 사리지는 이벤트
+	$(".bigPictureWrapper").on("click",function(e){
+		$(".bigPicture").animate({width:'0%', height:'0%'},1000);
+		setTimeout(function(){
+			$('.bigPictureWrapper').hide();
+		},1000);
+	});	
+	
+	//register
+	var regform = $(".regform");
+	$(".register").on("click",function(e){
+		e.preventDefault();
+		
+		console.log("등록버튼 클릭");
+		
+		var str = "";
+		
+		$(".uploadResult ul li").each(function(i,obj){
+			var jobj = $(obj);
+			console.dir(jobj);
+			
+			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+			
+		});
+
+		regform.append(str).attr("action","/mini/register").attr("method","post").submit();
+	});
+	
+	//첨부파일 이미지 보여주기 & 다운로드 처리
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		
+		var str ="";
+		
+		$(uploadResultArr).each(function(i,obj){
+			
+			if(obj.image){
+				
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-type='"+obj.image+"' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str += "</il>";
+				
+			}else{
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/resource/img2/aaa.png'></a>";
+				str += "</div>";
+				str += "</il>";
+				
+			}
+		});
+		
+		uploadResult.append(str);
+	}
+	
+	
+	//첨부파일 확장자나 크기 사전 처리
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)");
+	var maxSize = 5242880; //5메가바이트
+	
+	function checkExtension(fileName, fileSize){
+
+		if(fileSize >= maxSize){
+
+			alert("파일 사이즈 초과");
+			return false;
+		}
+		
+		if(regex.test(fileName)){
+
+			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+			return false;
+		}
+		return true;
+	}
+	
+	var cloneObj = $(".uploadDiv").clone();
+	
+	//Upload 버튼
+	$("#uploadBtn").on("click",function(e){
+		
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadfile']");
+		var files = inputFile[0].files;
+		
+		console.log(files);
+		
+		//form태그에 파일 추가하기
+		for(var i = 0; i < files.length; i++){
+			
+			if(!checkExtension(files[i].name, files[i].size)){
+				return false;
+			}
+			
+			formData.append("uploadfile",files[i]);	
+		}
+		
+		
+		$.ajax({
+			url: '/upload/uploadAjaxAction',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type : 'POST',
+			success : function(result){
+				console.log(result);
+				
+				showUploadedFile(result);
+				
+				$(".uploadDiv").html(cloneObj.html());
+				
+			}
+		});// end ajax
+		
+		
+	});// end Upload 버튼
+	
+});
+
+
+</script>

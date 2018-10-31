@@ -14,7 +14,7 @@
   <script src="/resources/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
   <!-- <script src="/resources/js/owl.carousel.js"></script> -->
   <!-- jQuery full calendar -->
-  <<script src="/resources/js/fullcalendar.min.js"></script>
+  <script src="/resources/js/fullcalendar.min.js"></script>
     <!-- Full Google Calendar - Calendar -->
     <script src="/resources/assets/fullcalendar/fullcalendar/fullcalendar.js"></script>
     <!--script for this page only-->
@@ -27,7 +27,7 @@
 <!--custome script for all page-->
  
     <script src="/resources/js/scripts.js"></script>
-    custom script for this page
+    
     <script src="/resources/js/sparkline-chart.js"></script>
     <script src="/resources/js/easy-pie-chart.js"></script>
     <script src="/resources/js/jquery-jvectormap-1.2.2.min.js"></script>
@@ -42,7 +42,7 @@
     <script src="/resources/js/jquery.slimscroll.min.js"></script>
     
     <script>
-      //knob
+
     </script>
 
 </body>

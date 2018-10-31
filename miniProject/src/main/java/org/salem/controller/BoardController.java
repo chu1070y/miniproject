@@ -1,15 +1,22 @@
 package org.salem.controller;
 
+import java.util.List;
+
+import org.salem.domain.BoardAttachVO;
 import org.salem.domain.BoardVO;
 import org.salem.domain.PageDTO;
 import org.salem.service.Boardservice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.Setter;
@@ -23,9 +30,17 @@ public class BoardController {
 	@Setter(onMethod_ = @Autowired)
 	Boardservice service;
 	
+	@GetMapping(value="/getAttachList", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(int bno){
+		
+		return new ResponseEntity<>(service.getAttachList(bno),HttpStatus.OK);
+	}
+	
 	@GetMapping("/list")
 	public void boardList(Model model,PageDTO pageDTO) {
 		log.info("list page~~~~~~~~~~~~~~~");
+		
 		
 		pageDTO.setTotal(service.count(pageDTO));
 		
@@ -43,7 +58,12 @@ public class BoardController {
 		log.info("register post.....................");
 		
 		if(vo.getId()==""||vo.getTitle()==""||vo.getContent()==""){
-			return "redirect:/mini/list";
+			rttr.addFlashAttribute("result","fail");
+			return "redirect:/mini/register";
+		}
+
+		if(vo.getAttachList() != null) {
+			vo.getAttachList().forEach(attach -> log.info(attach));
 		}
 		
 		int count = service.register(vo);

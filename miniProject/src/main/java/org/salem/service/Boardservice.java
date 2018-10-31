@@ -2,6 +2,7 @@ package org.salem.service;
 
 import java.util.List;
 
+import org.salem.domain.BoardAttachVO;
 import org.salem.domain.BoardVO;
 import org.salem.domain.PageDTO;
 
@@ -20,4 +21,6 @@ public interface Boardservice {
 	public int count(PageDTO pageDTO);
 	
 	public List<BoardVO> search(PageDTO pageDTO);
+	
+	public List<BoardAttachVO> getAttachList(int bno);
 }

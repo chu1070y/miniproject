@@ -5,6 +5,11 @@
 
 <mapper namespace="org.salem.mapper.Boardmapper">
 
+	<select id="key" resultType="int">
+		select bno from board where del = 0
+		order by bno desc limit 0,1
+	</select>
+
 	<select id="select" resultType="org.salem.domain.BoardVO">
 		select * from board where del = 0
 		order by bno desc limit #{skip}, #{display}
@@ -25,7 +30,7 @@
 	</update>
 
 	<update id="update">
-		update board set title=#{title}, content=#{content}
+		update board set title=#{title}, content=#{content}, updatedate=now()
 		where bno=#{bno}
 	</update>
 
