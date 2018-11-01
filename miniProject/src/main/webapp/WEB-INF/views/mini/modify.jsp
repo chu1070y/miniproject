@@ -5,6 +5,63 @@
 
 <%@include file="../includes/header.jsp"%>
 
+<style>
+
+	.uploadResult{
+		width: 80%;
+		background-color: gray;
+	}
+	
+	.uploadResult ul{
+		display: flex;
+		flex-flow: row;
+		justify-content: center;
+		align-items: center;
+		color: white;
+	}
+	
+	.uploadResult ul li{
+		list-style: none;
+		padding: 20px;
+		align-centent: center;
+		text-align: center;
+	}
+	
+	.uploadResult ul li img{
+	display:inline;
+	height: 100px;
+	}
+	
+	.uploadResult ul li span{
+	color: white;
+	}
+	
+	.bigPictureWrapper{
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+	background: rgba(255,255,255,0.5);
+	}
+	
+	.bigPicture{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	}
+	
+	.bigPicture img{
+	width:600px;
+	}
+
+</style>
+
 <!--main content start-->
 <section id="main-content">
 	<section class="wrapper">
@@ -35,12 +92,12 @@
 							<div class="form quick-post">
 								<!-- Edit profile form (not working)-->
 								
-								<form class="form-horizontal" action="/mini/modify" method="post">
+								<form class="modform">
 									<!-- Title -->
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Title</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" name="title" value="${read.title}">
+											<input type="text" class="form-control" id="title" name="title" value="${read.title}">
 										</div>
 									</div>
 
@@ -56,9 +113,17 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="content">Content</label>
 										<div class="col-lg-10">
-											<textarea class="form-control" name="content">${read.content}</textarea>
+											<textarea class="form-control" id="content" name="content">${read.content}</textarea>
 										</div>
 									</div>
+									
+									<input type="hidden" name="bno" value="${read.bno}">
+									<input type="hidden" id="page" name="page" value="${page.page}">
+									<input type="hidden" id="display" name="display" value="${page.display}">
+									<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+									<input type="hidden" id="type" name="type" value="${page.type}">
+									
+									</form>
 
 
 									<!-- Buttons -->
@@ -66,35 +131,11 @@
 									
 										<!-- Buttons -->
 										<div class="col-lg-offset-2 col-lg-9">
-											
-											<input type="hidden" name="bno" value="${read.bno}">
-											<input type="hidden" id="page" name="page" value="${page.page}">
-											<input type="hidden" id="display" name="display" value="${page.display}">
-											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
-											<input type="hidden" id="type" name="type" value="${page.type}">
-											
-											<button type="submit" class="btn btn-primary">수정하기</button>
-											</form>
-											
-											<form action="/mini/delete" method="post">
-											
-											<input type="hidden" name="bno" value="${read.bno}">
-											<input type="hidden" id="display" name="display" value="${page.display}">
-											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
-											<input type="hidden" id="type" name="type" value="${page.type}">
-											
-											<button type="submit" class="btn btn-danger">삭제하기</button>
-											</form>
-											
-											<form action="/mini/list">
-											
-											<input type="hidden" id="page" name="page" value="${page.page}">
-											<input type="hidden" id="display" name="display" value="${page.display}">
-											<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
-											<input type="hidden" id="type" name="type" value="${page.type}">
-											
-											<button type="submit" class="btn btn-default">목록으로</button>
-											</form>
+
+											<button id="modify" type="submit" class="btn btn-primary">수정하기</button>
+											<button id="delete" type="submit" class="btn btn-danger">삭제하기</button>
+											<button id="golist" type="submit" class="btn btn-default">돌아가기</button>
+
 										</div>
 									</div>
 							</div>
@@ -110,10 +151,44 @@
 
 			</div>
 		</div>
+		
+		<form class="actionform">
+			<input type="hidden" id="page" name="page" value="${page.page}">
+			<input type="hidden" id="display" name="display" value="${page.display}">
+			<input type="hidden" name="bno" value="${read.bno}">
+			<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
+			<input type="hidden" id="type" name="type" value="${page.type}">
+		</form>
+		
+		
 
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">첨부파일</div>
+						
+						<div class="panel-body">
+							<div class="uploadDiv col-lg-2">
+								<input type='file' name='uploadfile' multiple>
+							</div>
+							<br/><br/>
+							<div class='uploadResult col-lg-12'>
+								<ul>
+				
+								</ul>
+							</div>
+			
+							<button id='uploadBtn'>Upload</button>
 
+						</div>
+					</div>
+				</div>
+			</div>
 
-
+<div class='bigPictureWrapper'>
+	<div class="bigPicture">
+	</div>
+</div>
 
 
 
@@ -121,3 +196,225 @@
 	</section>
 	<!-- container section start -->
 	<%@include file="../includes/footer.jsp"%>
+	
+<script>
+
+$(document).ready(function(){
+	
+	var actionform = $(".actionform");
+	var modform = $(".modform");
+	
+	$("#modify").on("click",function(e){
+		e.preventDefault();
+		
+     	 var title = $("#title").val();
+      	 var id =  $("#id").val();
+         var content =  $("#content").val();
+      	 
+		console.log("수정하기 클릭");
+		
+      	 if(title == ""){
+       		 alert("제목을 입력해주세요.");
+       		 return;
+       	 }
+      	 
+      	 if(content == ""){
+       		 alert("내용을 입력해주세요.");
+      		 return;
+       	 }
+   
+		
+		var str = "";
+		
+		$(".uploadResult ul li").each(function(i,obj){
+			
+			var jobj = $(obj);
+			
+			console.dir(jobj);
+			
+			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+		});//end each
+
+		modform.append(str).attr("action","/mini/modify").attr("method","post").submit();
+	});
+	
+	$("#golist").on("click",function(e){
+		e.preventDefault();
+		actionform.attr("action","/mini/read").attr("method","get").submit();
+	});
+	
+	$("#delete").on("click",function(e){
+		e.preventDefault();
+		actionform.attr("action","/mini/delete").attr("method","post").submit();
+	});
+	
+	
+	//첨부파일 삭제
+	$(".uploadResult").on("click","button",function(e){
+		
+		console.log("delete file");
+		
+		if(confirm("이 파일을 삭제하시겠습니까? ")){
+			var targetLi = $(this).closest("li");
+			targetLi.remove();
+		}
+	});
+	
+	
+	//첨부파일 나타내기
+	(function(){
+		var bno = '<c:out value="${read.bno}"/>';
+		
+		$.getJSON("/mini/getAttachList",{bno:bno},function(arr){
+			
+			console.log(arr);
+			
+			var str = "";
+			
+			$(arr).each(function(i,attach){
+				
+				//image type
+				if(attach.fileType){
+					var fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
+					
+					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
+					str += "<div>";
+					str += "<span>"+attach.fileName+"</span>";
+					str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' ";
+					str += "class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+					str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
+					str += "</div>";
+					str += "</li>";
+				}else{
+					
+					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
+					str += "<div>";
+					str += "<span>"+attach.fileName+"</span><br/>";
+					str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' ";
+					str += "class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+					str += "<img src='/resources/img2/aaa.png'>";
+					str += "</div>";
+					str += "</li>";
+				}
+			});//end each
+			
+			$(".uploadResult ul").html(str);
+			
+		});//end getjson
+	})();//end function
+	
+	//첨부파일 확장자나 크기 사전 처리
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)");
+	var maxSize = 5242880; //5메가바이트
+	
+	function checkExtension(fileName, fileSize){
+
+		if(fileSize >= maxSize){
+
+			alert("파일 사이즈 초과");
+			return false;
+		}
+		
+		if(regex.test(fileName)){
+
+			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+			return false;
+		}
+		return true;
+	}
+	
+	var cloneObj = $(".uploadDiv").clone();
+	
+	//Upload 버튼
+	$("#uploadBtn").on("click",function(e){
+		
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadfile']");
+		var files = inputFile[0].files;
+		
+		console.log(files);
+		
+		//form태그에 파일 추가하기
+		for(var i = 0; i < files.length; i++){
+			
+			if(!checkExtension(files[i].name, files[i].size)){
+				return false;
+			}
+			
+			formData.append("uploadfile",files[i]);	
+		}
+		
+		
+		$.ajax({
+			url: '/upload/uploadAjaxAction',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type : 'POST',
+			success : function(result){
+				console.log(result);
+				
+				showUploadedFile(result);
+				
+				$(".uploadDiv").html(cloneObj.html());
+				
+			}
+		});// end ajax
+		
+		
+	});// end Upload 버튼
+	
+	//첨부파일 이미지 보여주기 & 다운로드 처리
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		
+		var str ="";
+		
+		$(uploadResultArr).each(function(i,obj){
+			
+			if(obj.image){
+				
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-type='"+obj.image+"' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str += "</il>";
+				
+			}else{
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/resources/img2/aaa.png'></a>";
+				str += "</div>";
+				str += "</il>";
+				
+			}
+		});
+		
+		uploadResult.append(str);
+	}
+
+});
+</script>
+	
+	
+	
+	
+	
+	
+	

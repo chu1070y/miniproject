@@ -17,6 +17,10 @@
 	<select id="findByBno" resultType="org.salem.domain.BoardAttachVO">
 		select * from attach where bno = #{bno}
 	</select>
+	
+	<delete id="deleteAll">
+		delete from attach where bno = #{bno}
+	</delete>
 
 
 </mapper>

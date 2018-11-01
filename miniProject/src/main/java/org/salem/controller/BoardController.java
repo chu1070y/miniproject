@@ -1,5 +1,9 @@
 package org.salem.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.salem.domain.BoardAttachVO;
@@ -29,6 +33,7 @@ public class BoardController {
 
 	@Setter(onMethod_ = @Autowired)
 	Boardservice service;
+
 	
 	@GetMapping(value="/getAttachList", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -83,9 +88,13 @@ public class BoardController {
 	@PostMapping("/delete")
 	public String delete(PageDTO pageDTO, RedirectAttributes rttr) {
 		
-		int count = service.delete(pageDTO);
+		List<BoardAttachVO> attachList = service.getAttachList(pageDTO.getBno());
 		
-		rttr.addFlashAttribute("result",count==1?"success":"fail");
+		if(service.remove(pageDTO)) {
+			//첨부파일 삭제
+			deleteFiles(attachList);
+			rttr.addFlashAttribute("result","success");
+		}
 		
 		return pageDTO.getLink("redirect:/mini/list");
 	}
@@ -98,6 +107,39 @@ public class BoardController {
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
 		
 		return pageDTO.getLink("redirect:/mini/read");
+	}
+	
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		
+		if(attachList == null|| attachList.size()==0) {
+			return;
+		}
+		
+		log.info("delete attach files..............");
+		log.info(attachList);
+		
+		attachList.forEach(attach->{
+			
+			try {
+				Path file = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\"+attach.getUuid()+"_"+attach.getFileName());
+			
+				Files.deleteIfExists(file);
+				
+				if(Files.probeContentType(file).startsWith("image")) {
+					
+					Path thumbNail = Paths.get("C:\\upload\\" + attach.getUploadPath()+"\\s_"+attach.getUuid()+"_"+attach.getFileName());
+					
+					Files.delete(thumbNail);
+					
+				}
+				
+			} catch (Exception e) {
+				log.info("delete file error");
+				e.printStackTrace();
+			}//end catch
+			
+		});//end foreach
+		
 	}
 	
 	

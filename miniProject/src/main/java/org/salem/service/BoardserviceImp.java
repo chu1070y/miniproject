@@ -62,10 +62,26 @@ public class BoardserviceImp implements Boardservice{
 		return mapper.delete(pageDTO);
 	}
 
+	@Transactional
 	@Override
 	public int update(BoardVO vo) {
+		log.info("modify run.....");
 		
-		return mapper.update(vo);
+		attachMapper.deleteAll(vo.getBno());
+		
+		int result = mapper.update(vo);
+		
+		boolean modifyResult = (result == 1);
+		
+		if(modifyResult && vo.getAttachList().size() > 0) {
+			vo.getAttachList().forEach(attach->{
+				
+				attach.setBno(vo.getBno());
+				attachMapper.insert(attach);
+			});
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -84,6 +100,17 @@ public class BoardserviceImp implements Boardservice{
 	public List<BoardAttachVO> getAttachList(int bno) {
 		
 		return attachMapper.findByBno(bno);
+	}
+
+	@Transactional
+	@Override
+	public boolean remove(PageDTO pageDTO) {
+		
+		log.info("remove........" + pageDTO.getBno());
+		
+		attachMapper.deleteAll(pageDTO.getBno());
+		
+		return mapper.delete(pageDTO)==1;
 	}
 
 }

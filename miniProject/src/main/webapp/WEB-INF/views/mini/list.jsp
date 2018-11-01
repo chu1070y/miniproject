@@ -186,6 +186,9 @@
        	 if(type == ""){
        		 alert("카테고리를 입력해주세요.");
        		 return;
+       	 }else if(keyword=""){
+       		 alert("검색할 내용을 입력해주세요.");
+      		 return;
        	 }
        	 
        	 $("#keyword").val(keyword);

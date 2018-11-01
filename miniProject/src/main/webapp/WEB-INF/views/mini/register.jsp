@@ -234,8 +234,31 @@ $(document).ready(function(){
 	var regform = $(".regform");
 	$(".register").on("click",function(e){
 		e.preventDefault();
-		
+        
+      	 var title = $("#title").val();
+      	 var id =  $("#id").val();
+         var content =  $("#content").val();
+      	 
 		console.log("등록버튼 클릭");
+		
+      	 if(title == ""){
+      		console.log("-------------1");
+       		 alert("제목을 입력해주세요.");
+       		 return;
+       	 }
+      	 
+      	 if(content == ""){
+      		console.log("-------------2");
+       		 alert("내용을 입력해주세요.");
+      		 return;
+       	 }
+      	 
+      	 if(id == ""){
+      		 console.log("-------------3");
+       		 alert("작성자를 입력해주세요.");
+      		 return;
+       	 }
+		
 		
 		var str = "";
 		
@@ -250,7 +273,7 @@ $(document).ready(function(){
 			
 		});
 
-		regform.append(str).attr("action","/mini/register").attr("method","post").submit();
+ 		regform.append(str).attr("action","/mini/register").attr("method","post").submit();
 	});
 	
 	//첨부파일 이미지 보여주기 & 다운로드 처리
@@ -285,7 +308,7 @@ $(document).ready(function(){
 				str += "<div>";
 				str += "<span>" + obj.fileName + "</span>";
 				str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-				str += "<img src='/resource/img2/aaa.png'></a>";
+				str += "<img src='/resources/img2/aaa.png'></a>";
 				str += "</div>";
 				str += "</il>";
 				
