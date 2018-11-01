@@ -387,6 +387,7 @@
 		
 		console.log(files);
 		
+		
 		//form태그에 파일 추가하기
 		for(var i = 0; i < files.length; i++){
 			
@@ -417,6 +418,48 @@
 		
 	});// end Upload 버튼
 	
+	
+	//첨부파일 이미지 보여주기 & 다운로드 처리
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr){
+		
+		var str ="";
+		
+		$(uploadResultArr).each(function(i,obj){
+			
+			if(obj.image){
+				
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li class='li' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-type='"+obj.image+"' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str += "</il>";
+				
+				
+			}else{
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+				
+				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+				
+				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<div>";
+				str += "<span>" + obj.fileName + "</span>";
+				str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+				str += "<img src='/resources/img2/aaa.png'></a>";
+				str += "</div>";
+				str += "</il>";
+			}
+		});
+		
+		uploadResult.append(str);
+	}
 	
 
 });

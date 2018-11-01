@@ -35,8 +35,8 @@ public class DataSourceTests {
 		log.info("22222222");
 		
 		BoardVO vo = new BoardVO();
-		vo.setTitle("°¡¾Ç°¡¾Ç");
-		vo.setId("gaiga");
+		vo.setTitle("Á×±â»ì±â");
+		vo.setId("salem");
 		vo.setContent("1!23213");
 		
 		log.info(mapper.register(vo));

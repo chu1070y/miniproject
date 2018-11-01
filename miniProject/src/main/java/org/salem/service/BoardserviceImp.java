@@ -80,7 +80,7 @@ public class BoardserviceImp implements Boardservice{
 				attachMapper.insert(attach);
 			});
 		}
-		
+		log.info("여기가 문제인가????");
 		return result;
 	}
 
