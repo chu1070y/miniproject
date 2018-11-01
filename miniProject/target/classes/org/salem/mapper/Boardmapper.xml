@@ -10,7 +10,7 @@
 		order by bno desc limit 0,1
 	</select>
 
-	<select id="select" resultType="org.salem.domain.BoardVO">
+	<select id="select" resultType="org.salem.domain.BoardVO">	
 		select * from board where del = 0
 		order by bno desc limit #{skip}, #{display}
 	</select>
@@ -18,6 +18,11 @@
 	<insert id="register">
 		insert into board(title,id,content)
 		values(#{title},#{id},#{content})
+		
+		<selectKey resultType="int" keyProperty="bno" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		
 	</insert>
 
 	<select id="read" resultType="org.salem.domain.BoardVO">

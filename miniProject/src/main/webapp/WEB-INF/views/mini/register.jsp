@@ -59,6 +59,11 @@
 	.bigPicture img{
 	width:600px;
 	}
+	
+	#submission {
+ 	 text-align: center;
+ 	}
+
 
 </style>
 
@@ -108,7 +113,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Writer</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" id="id" name="id">
+											<input type="text" class="form-control" id="id" name="id" value="salem" readonly="readonly">
 										</div>
 									</div>
 
@@ -124,13 +129,16 @@
 
 			<br/>
 
-			<div class='col-lg-12 row'>
+			<div class='row'>
 			<form action="/mini/list">
     		<!-- Buttons -->
+    		<p id="submission">
 			<button type="submit" class="btn btn-primary register">등록하기</button>					
 			
 			<button type="submit" class="btn btn-default">목록으로</button>
+			</p>
 			</form>
+
 			</div>
 									
 										</div>
@@ -197,7 +205,7 @@ function showImage(fileCallPath){
 	
 	$(".bigPictureWrapper").css("display","flex").show();
 	$(".bigPicture")
-	.html("<img src='/upload/display?fileName="+ encodeURI(fileCallPath)+"'>")
+	.html("<img src='/upload/display?fileName="+ fileCallPath+"'>")
 	.animate({width:'100%',height:'100%'},1000);
 }
 
@@ -205,6 +213,7 @@ $(document).ready(function(){
 	
 	//이미지 삭제
 	$(".uploadResult").on("click","button",function(e){
+		e.preventDefault();
 		
 		var targetFile = $(this).data("file");
 		var type = $(this).data("type");
@@ -221,6 +230,24 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	//이미지 보여주기
+			$(".uploadResult").on("click","img",function(e){
+			e.preventDefault();
+			
+			console.log("view image");
+			
+			var liObj = $(this).closest("li");
+			
+			var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+			
+			if(liObj.data("type")){
+				showImage(path.replace(new RegExp(/\\/g),"/"));
+			}else{
+			
+			}
+		});
+	
 	
 	//이미지 사리지는 이벤트
 	$(".bigPictureWrapper").on("click",function(e){
@@ -291,13 +318,14 @@ $(document).ready(function(){
 				
 				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
 				
-				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+				str += "<li class='li' data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
 				str += "<div>";
 				str += "<span>" + obj.fileName + "</span>";
 				str += "<button type='button' data-type='"+obj.image+"' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
 				str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
 				str += "</div>";
 				str += "</il>";
+				
 				
 			}else{
 				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
@@ -311,7 +339,6 @@ $(document).ready(function(){
 				str += "<img src='/resources/img2/aaa.png'></a>";
 				str += "</div>";
 				str += "</il>";
-				
 			}
 		});
 		

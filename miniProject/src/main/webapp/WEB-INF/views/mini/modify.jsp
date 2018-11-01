@@ -113,7 +113,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="content">Content</label>
 										<div class="col-lg-10">
-											<textarea class="form-control" id="content" name="content">${read.content}</textarea>
+											<textarea class="form-control" id="content" name="content"><c:out value="${read.content}"/></textarea>
 										</div>
 									</div>
 									
@@ -199,7 +199,26 @@
 	
 <script>
 
-$(document).ready(function(){
+	function showImage(fileCallPath){
+		console.log(encodeURI(fileCallPath));
+		
+		$(".bigPictureWrapper").css("display","flex").show();
+		$(".bigPicture")
+		.html("<img src='/upload/display?fileName="+ fileCallPath+"'>")
+		.animate({width:'100%',height:'100%'},1000);
+	} 
+
+    $(document).ready(function(){
+	
+
+	
+	//이미지 사리지는 이벤트
+	$(".bigPictureWrapper").on("click",function(e){
+		$(".bigPicture").animate({width:'0%', height:'0%'},1000);
+		setTimeout(function(){
+			$('.bigPictureWrapper').hide();
+		},1000);
+	});	
 	
 	var actionform = $(".actionform");
 	var modform = $(".modform");
@@ -254,7 +273,7 @@ $(document).ready(function(){
 	
 	//첨부파일 삭제
 	$(".uploadResult").on("click","button",function(e){
-		
+		e.preventDefault();
 		console.log("delete file");
 		
 		if(confirm("이 파일을 삭제하시겠습니까? ")){
@@ -280,6 +299,15 @@ $(document).ready(function(){
 				if(attach.fileType){
 					var fileCallPath = encodeURIComponent(attach.uploadPath+"/s_"+attach.uuid+"_"+attach.fileName);
 					
+					var originPath = attach.uploadPath + "\\" + attach.uuid + "_" + attach.fileName;
+					
+					originPath = originPath.replace(new RegExp(/\\/g),"/");
+					
+					console.log("----------------");
+					console.log("----------------");
+					console.log(fileCallPath);
+					console.log("----------------");
+					
 					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
 					str += "<div>";
 					str += "<span>"+attach.fileName+"</span>";
@@ -288,6 +316,7 @@ $(document).ready(function(){
 					str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
 					str += "</div>";
 					str += "</li>";
+
 				}else{
 					
 					str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
@@ -298,6 +327,7 @@ $(document).ready(function(){
 					str += "<img src='/resources/img2/aaa.png'>";
 					str += "</div>";
 					str += "</li>";
+
 				}
 			});//end each
 			
@@ -305,6 +335,26 @@ $(document).ready(function(){
 			
 		});//end getjson
 	})();//end function
+	
+	
+ 	//이미지 보여주기
+			$(".uploadResult").on("click","img",function(e){
+			
+			console.log("click");
+			
+			var liObj = $(this).closest("li");
+			
+			var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+			
+			if(liObj.data("type")){
+				
+				showImage(path.replace(new RegExp(/\\/g),"/"));
+				
+			}else{
+				//download
+				self.location = "/upload/download?fileName="+path;
+			}
+		});
 	
 	//첨부파일 확장자나 크기 사전 처리
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)");
@@ -367,47 +417,7 @@ $(document).ready(function(){
 		
 	});// end Upload 버튼
 	
-	//첨부파일 이미지 보여주기 & 다운로드 처리
-	var uploadResult = $(".uploadResult ul");
 	
-	function showUploadedFile(uploadResultArr){
-		
-		var str ="";
-		
-		$(uploadResultArr).each(function(i,obj){
-			
-			if(obj.image){
-				
-				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
-				
-				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-				
-				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
-				str += "<div>";
-				str += "<span>" + obj.fileName + "</span>";
-				str += "<button type='button' data-type='"+obj.image+"' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-				str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
-				str += "</div>";
-				str += "</il>";
-				
-			}else{
-				var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
-				
-				var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-				
-				str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
-				str += "<div>";
-				str += "<span>" + obj.fileName + "</span>";
-				str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
-				str += "<img src='/resources/img2/aaa.png'></a>";
-				str += "</div>";
-				str += "</il>";
-				
-			}
-		});
-		
-		uploadResult.append(str);
-	}
 
 });
 </script>

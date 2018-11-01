@@ -70,13 +70,13 @@
 
 								<c:forEach var="board" items="${list}">
 									<tr>
-										<td>${board.bno}</td>
-										<td><a href='${board.bno}' class="board" >${board.title}</a></td>
-										<td>${board.id}</td>
+										<td><c:out value="${board.bno}"/></td>
+										<td><a href='${board.bno}' class="board"><c:out value="${board.title}"/></a></td>
+										<td><c:out value="${board.id}"/></td>
 										<td><fmt:formatDate type="both" dateStyle="medium"
 												timeStyle="medium" value="${board.regdate}" /></td>
-										<td>${board.view}</td>
-										<td>${board.good}/${board.bad}</td>
+										<td><c:out value="${board.view}"/></td>
+										<td><c:out value="${board.good}"/>/<c:out value="${board.bad}"/></td>
 									</tr>
 								</c:forEach>
 
@@ -100,7 +100,7 @@
           <div class="col-lg-2">
             <section class="panel">
               	<select class="form-control col-lg-2 select">
-                   <option value="">- Choose Cateogry -</option>
+                   <option value="">- Choose Category -</option>
                    <option value="t" ${page.type == 't' ? "selected":""}>제목</option>
                    <option value="w" ${page.type == 'w' ? "selected":""}>작성자</option>
                    <option value="c" ${page.type == 'c' ? "selected":""}>내용</option>
@@ -129,7 +129,7 @@
 			</c:if>
 			
 			<c:forEach var="pageNum"  begin="${page.start}" end="${page.end}" step="1">
-			<button class="btn btn-success letitgo" value="${pageNum}" type="button">${pageNum}</button>
+			<button class="btn btn-success letitgo" value="${pageNum}" type="button"><c:out value="${pageNum}"/></button>
 			</c:forEach>
 			
 			<c:if test="${page.next}">
@@ -182,11 +182,12 @@
          
        	 var keyword = $("#sKeyword").val();
        	 var type =  $(".select").val();
-       	 
+
+       	
        	 if(type == ""){
        		 alert("카테고리를 입력해주세요.");
        		 return;
-       	 }else if(keyword=""){
+       	 }else if(keyword==""){
        		 alert("검색할 내용을 입력해주세요.");
       		 return;
        	 }
@@ -195,10 +196,10 @@
        	 $("#type").val(type);
        	 $("#page").val(1);
        	 
-         actionform
+           actionform
            .attr("action", "/mini/list")
            .attr("method", "get")
-           .submit();
+           .submit(); 
        	 
         });
 		

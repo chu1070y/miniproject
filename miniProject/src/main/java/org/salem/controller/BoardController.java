@@ -46,6 +46,7 @@ public class BoardController {
 	public void boardList(Model model,PageDTO pageDTO) {
 		log.info("list page~~~~~~~~~~~~~~~");
 		
+		log.info(pageDTO.getKeyword());
 		
 		pageDTO.setTotal(service.count(pageDTO));
 		

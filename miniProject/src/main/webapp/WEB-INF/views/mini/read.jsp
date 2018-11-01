@@ -112,7 +112,7 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="content">Content</label>
 										<div class="col-lg-10">
-											<textarea class="form-control" readonly="readonly">${read.content}</textarea>
+											<textarea class="form-control" readonly="readonly"><c:out value="${read.content}"/></textarea>
 										</div>
 									</div>
 
@@ -210,11 +210,11 @@
 			
 			var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
 			
-			if(liObj.data("type")){
-				showImage(path.replace(new RegExp(/\\/g),"/"));
+			if(!liObj.data("type")){
+				
 			}else{
 				//download
-				self.location = "/download?fileName="+path;
+				self.location = "/upload/download?fileName="+path;
 			}
 		});
 		
@@ -245,6 +245,7 @@
 						
 						str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
 						str += "<div>";
+						str += "<span>" + attach.fileName + "<span>";
 						str += "<img src='/upload/display?fileName="+fileCallPath+"'>";
 						str += "</div>";
 						str += "</li>";

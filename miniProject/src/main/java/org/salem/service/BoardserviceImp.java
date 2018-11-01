@@ -43,7 +43,7 @@ public class BoardserviceImp implements Boardservice{
 		int result = mapper.register(vo);
 		
 		vo.getAttachList().forEach(attach -> {
-			attach.setBno(mapper.key());
+			attach.setBno(vo.getBno());
 			attachMapper.insert(attach);
 		});
 		

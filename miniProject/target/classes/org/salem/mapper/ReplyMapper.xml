@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.salem.mapper.ReplyMapper">
+
+	<insert id="replyInsert">
+		insert into reply(bno,id,reply,gno)
+		values(#{bno},"salem","please",LAST_INSERT_ID())
+	</insert>
+
+	<select id="getReplyList" resultType="org.salem.domain.ReplyVO">
+		select * from reply where
+		bno=#{bno} and del = 0 order by rno desc;
+	</select>
+
+	<update id="replyDelete">
+		update reply set del = 1 where rno=#{rno}
+	</update>
+
+	<update id="replyUpdate">
+		update reply set reply=#{reply}, updatedate = now() where rno = #{rno}
+	</update>
+	
+	<select id="getListWithPaging" resultType="org.salem.domain.ReplyVO">
+		
+	</select>
+
+</mapper>
