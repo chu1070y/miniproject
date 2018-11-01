@@ -2,6 +2,7 @@ package org.salem.service;
 
 import java.util.List;
 
+import org.salem.domain.ReplyPageDTO;
 import org.salem.domain.ReplyVO;
 import org.salem.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,21 @@ public class ReplyServiceImp implements ReplyService{
 	}
 
 	@Override
-	public List<ReplyVO> getListWithPaging(int bno) {
+	public List<ReplyVO> getListWithPaging(ReplyPageDTO dto) {
 		// TODO Auto-generated method stub
-		return mapper.getListWithPaging(bno);
+		return mapper.getListWithPaging(dto);
+	}
+
+	@Override
+	public ReplyVO replyRead(int rno) {
+		// TODO Auto-generated method stub
+		return mapper.replyRead(rno);
+	}
+
+	@Override
+	public int getCountByBno(int bno) {
+		// TODO Auto-generated method stub
+		return mapper.getCountByBno(bno);
 	}
 	
 }

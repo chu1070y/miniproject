@@ -2,6 +2,7 @@ package org.salem.mapper;
 
 import java.util.List;
 
+import org.salem.domain.ReplyPageDTO;
 import org.salem.domain.ReplyVO;
 
 public interface ReplyMapper {
@@ -14,6 +15,9 @@ public interface ReplyMapper {
 	
 	public int replyUpdate(ReplyVO reply);
 	
-	public List<ReplyVO> getListWithPaging(int bno);
+	public List<ReplyVO> getListWithPaging(ReplyPageDTO dto);
 	
+	public ReplyVO replyRead(int rno);
+	
+	public int getCountByBno(int bno);
 }

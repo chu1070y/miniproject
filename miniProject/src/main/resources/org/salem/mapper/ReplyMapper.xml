@@ -6,11 +6,11 @@
 <mapper namespace="org.salem.mapper.ReplyMapper">
 
 	<insert id="replyInsert">
-		insert into reply(bno,id,reply,gno)
-		values(#{bno},"salem","please",LAST_INSERT_ID())
+		insert into reply(bno,id,reply)
+		values(#{bno},"salem",#{reply})
 	</insert>
 
-	<select id="getReplyList" resultType="org.salem.domain.ReplyVO">
+	<select id="getreplyList" resultType="org.salem.domain.ReplyVO">
 		select * from reply where
 		bno=#{bno} and del = 0 order by rno desc;
 	</select>
@@ -24,7 +24,14 @@
 	</update>
 	
 	<select id="getListWithPaging" resultType="org.salem.domain.ReplyVO">
-		
+		select * from reply where del = 0 and bno=#{bno} limit #{skip}, 10
+	</select>
+	
+	<select id="replyRead" resultType="org.salem.domain.ReplyVO">
+		select * from reply where rno=#{rno}
 	</select>
 
+	<select id="getCountByBno" resultType="int">
+		select count(*) from reply where bno = #{bno} and del=0 
+	</select>
 </mapper>

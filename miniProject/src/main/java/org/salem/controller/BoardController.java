@@ -64,8 +64,8 @@ public class BoardController {
 		log.info("register post.....................");
 		
 		if(vo.getId()==""||vo.getTitle()==""||vo.getContent()==""){
-			rttr.addFlashAttribute("result","fail");
-			return "redirect:/mini/register";
+			rttr.addFlashAttribute("result","글자를 입력해주세여");
+			return "redirect:/mini/read";
 		}
 
 		if(vo.getAttachList() != null) {
@@ -76,7 +76,7 @@ public class BoardController {
 		
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
 		
-		return "redirect:/mini/list";
+		return "redirect:/mini/read";
 	}
 	
 	@GetMapping({"/read","/modify"})

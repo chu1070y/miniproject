@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.salem.domain.ReplyPageDTO;
 import org.salem.domain.ReplyVO;
 import org.salem.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ReplyMapperTests {
 	public void testCreate() {
 		
 		ReplyVO reply = new ReplyVO();
-		reply.setBno(1047);
+		reply.setBno(6);
 		reply.setId("salem");
 		reply.setReply("댓글만들기 시작2");
 		
@@ -39,7 +40,7 @@ public class ReplyMapperTests {
 	
 	@Test
 	public void testRead() {
-		int targetBno = 1047;
+		int targetBno = 6;
 		List<ReplyVO> reply = mapper.getreplyList(targetBno);
 		
 		log.info(reply);
@@ -60,6 +61,17 @@ public class ReplyMapperTests {
 		
 		mapper.replyUpdate(reply);
 		
+	}
+	
+	@Test
+	public void testList2() {
+		ReplyPageDTO dto = new ReplyPageDTO();
+		dto.setBno(6);
+		dto.setPage(1);
+		
+		List<ReplyVO> replyList = mapper.getListWithPaging(dto);
+		
+		replyList.forEach(reply -> log.info(reply));
 	}
 	
 }

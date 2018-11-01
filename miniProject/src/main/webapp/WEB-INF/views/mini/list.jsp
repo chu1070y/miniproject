@@ -165,7 +165,7 @@
       <!-- /.modal-dialog -->
    </div>
    <!-- /.modal -->
-</div>
+
 
 
 <!-- container section start -->
@@ -263,9 +263,10 @@
             msg.modal();
         }
        	
-     }
+        }
 		
 	});
+	
 
 </script>
 
