@@ -424,6 +424,7 @@
 		modalModBtn.on("click",function(e){
 			
 			var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+			console.log(reply);
 			
 			replyService.update(reply,function(result){
 				alert(result);
