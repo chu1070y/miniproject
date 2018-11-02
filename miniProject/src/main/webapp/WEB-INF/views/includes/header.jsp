@@ -118,25 +118,19 @@
             <ul class="dropdown-menu extended logout">
               <div class="log-arrow-up"></div>
               <li class="eborder-top">
-                <a href="#"><i class="icon_profile"></i> My Profile</a>
+                <a href="list?page=1&display=10&keyword=salem&type=w"><i class="icon_profile"></i> salem-추연훈</a>
               </li>
               <li>
-                <a href="#"><i class="icon_mail_alt"></i> My Inbox</a>
+                <a href="list?page=1&display=10&keyword=gaiga&type=w"><i class="icon_mail_alt"></i> gaiga-김가익</a>
               </li>
               <li>
-                <a href="#"><i class="icon_clock_alt"></i> Timeline</a>
+                <a href="list?page=1&display=10&keyword=유명bj&type=w"><i class="icon_clock_alt"></i> 유명bj-박고은</a>
               </li>
               <li>
-                <a href="#"><i class="icon_chat_alt"></i> Chats</a>
+                <a href="list?page=1&display=10&keyword=하쉴&type=w"><i class="icon_chat_alt"></i> 하쉴-문지인</a>
               </li>
               <li>
-                <a href="login.html"><i class="icon_key_alt"></i> Log Out</a>
-              </li>
-              <li>
-                <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
-              </li>
-              <li>
-                <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
+                <a href="list?page=1&display=10&keyword=casper&type=w"><i class="icon_key_alt"></i> casper-박가영</a>
               </li>
             </ul>
           </li>
