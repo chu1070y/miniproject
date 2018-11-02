@@ -181,10 +181,10 @@
 								<li class="left clearfix" data-rno='3'>
 									<div>
 										<div class="header">
-											<strong class="primary-font">user00</strong>
-											<small class="pull-right text-muted">18.11.02 00:54</small>
+											<strong class="primary-font"></strong>
+											<small class="pull-right text-muted"></small>
 										</div>
-										<p>댓글시작</p>
+										<p></p>
 									</div>
 								</li>
 							</ul>
@@ -200,7 +200,7 @@
 			
 			
  <!-- 댓글 Modal -->
-   <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+   <div class="modal fade" id="modal" tabindex="-1" role="dialog"
       aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
@@ -246,7 +246,7 @@
 </div>
 
   <!-- 성공여부 Modal -->
-   <div class="smodal fade" id="smyModal" tabindex="-1" role="dialog"
+   <div class="modal fade smodal" id="smyModal" tabindex="-1" role="dialog"
       aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
@@ -255,7 +255,7 @@
                   aria-hidden="true">&times;</button>
                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
-            <div class="modal-body smodal"></div>
+            <div class="modal-body smodal-body"></div>
             <div class="modal-footer">
                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
@@ -361,7 +361,7 @@
 		}//end showList
 		
 		//댓글 모달창
-		var modal = $(".modal");
+		var modal = $("#modal");
 		var modalInputReply = modal.find("input[name='reply']");
 		var modalInputReplyer = modal.find("input[name='id']");
 		var modalInputReplyDate = modal.find("input[name='regDate']");
@@ -379,7 +379,7 @@
 			
 			modalRegisterBtn.show();
 			
-			$(".modal").modal("show");
+			$("#modal").modal("show");
 		});
 		
 		//댓글 등록 및 목록 갱신
@@ -416,7 +416,7 @@
 				modalModBtn.show();
 				modalRemoveBtn.show();
 				
-				$(".modal").modal("show");
+				$("#modal").modal("show");
 			});
 		});
 		
@@ -549,28 +549,32 @@
         var msg = $("#smyModal");
         var result = '<c:out value="${result}"/>';
 
+        console.log("modal=======================");
+        console.log(result);
+        console.log(msg);
+        
         checkModal(result);
         history.replaceState({}, null, null);
         
         function checkModal(result){
-        	
-       	console.log(result === ''||history.state);
-       	
+
        	if(result === ''||history.state){
        		 return;
        	}
        	 
        	if (result === 'success') {
-            $(".smodal").html("요청하신 작업이 수행되었습니다.");
+            $(".smodal-body").html("요청하신 작업이 수행되었습니다.");
             msg.modal();
         }
        	
        	if(result ==='none'){
-       		$(".smodal").html("요청하신 글은 삭제되었습니다.");
+       		$(".smodal-body").html("요청하신 글은 삭제되었습니다.");
             msg.modal();
        	}
        	
         }
+        
+        
         
 		//댓글 페이징 버튼
 		replyPageFooter.on("click","li a",function(e){

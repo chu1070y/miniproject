@@ -12,8 +12,12 @@ public class BoardVO {
 	private String title,id,content;
 	private Date regdate, updatedate;
 	
-	private int replyCnt;
+	private int count;
 	
 	private List<BoardAttachVO> attachList;
+	
+	public BoardVO() {
+		this.count = 0;
+	}
 
 }

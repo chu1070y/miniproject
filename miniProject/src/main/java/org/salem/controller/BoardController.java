@@ -50,6 +50,7 @@ public class BoardController {
 		
 		pageDTO.setTotal(service.count(pageDTO));
 		
+		
 		model.addAttribute("page", pageDTO);
 		model.addAttribute("list", service.search(pageDTO));
 	}
@@ -63,11 +64,6 @@ public class BoardController {
 	public String registerPOST(BoardVO vo,RedirectAttributes rttr) {
 		log.info("register post.....................");
 		
-		if(vo.getId()==""||vo.getTitle()==""||vo.getContent()==""){
-			rttr.addFlashAttribute("result","글자를 입력해주세여");
-			return "redirect:/mini/read";
-		}
-
 		if(vo.getAttachList() != null) {
 			vo.getAttachList().forEach(attach -> log.info(attach));
 		}
@@ -75,8 +71,8 @@ public class BoardController {
 		int count = service.register(vo);
 		
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
-		
-		return "redirect:/mini/read";
+
+		return "redirect:/mini/list";
 	}
 	
 	@GetMapping({"/read","/modify"})
@@ -84,8 +80,12 @@ public class BoardController {
 		log.info("read or modify page~~~~~~~~~~~~~~~");
 		
 		BoardVO vo = service.read(pageDTO);
-		log.info(service.read(pageDTO) == null);
-		model.addAttribute("read", service.read(pageDTO));
+		
+		if(vo == null) {
+			model.addAttribute("result", "none");
+		}
+		
+		model.addAttribute("read", vo);
 	}
 	
 	@PostMapping("/delete")
@@ -104,11 +104,11 @@ public class BoardController {
 	
 	@PostMapping("/modify")
 	public String update(BoardVO vo, PageDTO pageDTO, RedirectAttributes rttr) {
-		
+
 		int count = service.update(vo);
-		
+
 		rttr.addFlashAttribute("result",count==1?"success":"fail");
-		
+
 		return pageDTO.getLink("redirect:/mini/read");
 	}
 	

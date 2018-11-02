@@ -69,19 +69,20 @@ public class BoardserviceImp implements Boardservice{
 		
 		attachMapper.deleteAll(vo.getBno());
 		
-		int result = mapper.update(vo);
-		
-		boolean modifyResult = (result == 1);
-		
-		if(modifyResult && vo.getAttachList().size() > 0) {
+		if(vo.getAttachList()==null) {
+			return  mapper.update(vo);
+		}
+
+		if(vo.getAttachList().size() > 0) {
+
 			vo.getAttachList().forEach(attach->{
-				
+
 				attach.setBno(vo.getBno());
 				attachMapper.insert(attach);
 			});
 		}
-		log.info("여기가 문제인가????");
-		return result;
+
+		return mapper.update(vo);
 	}
 
 	@Override

@@ -71,7 +71,7 @@
 								<c:forEach var="board" items="${list}">
 									<tr>
 										<td><c:out value="${board.bno}"/></td>
-										<td><a href='${board.bno}' class="board"><c:out value="${board.title}"/></a></td>
+										<td><a href='${board.bno}' class="board"><c:out value="${board.title}"/></a>[${board.count}]</td>
 										<td><c:out value="${board.id}"/></td>
 										<td><fmt:formatDate type="both" dateStyle="medium"
 												timeStyle="medium" value="${board.regdate}" /></td>

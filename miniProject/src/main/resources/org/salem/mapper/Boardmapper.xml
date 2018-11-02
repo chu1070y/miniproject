@@ -62,7 +62,12 @@
 	</select>
 
 	<select id="search" resultType="org.salem.domain.BoardVO">
-		select * from board
+	
+	select board.bno, count, id, title, content, regdate, updatedate, del, view, good, bad
+from board
+left join (select count(*) count, bno from reply group by bno order by bno desc) replyCnt
+on board.bno = replyCnt.bno
+
 		where del = 0
 		<foreach collection="typeArr" item="item" separator="or"
 			open="and (" close=")">
@@ -80,7 +85,7 @@
 			</if>
 
 		</foreach>
-
+		
 		order by bno desc
 		limit #{skip}, #{display}
 
