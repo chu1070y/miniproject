@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j;
 @Data
 public class ReplyPageDTO {
 
-	private int page, skip, start, end, total, bno;
+	private int page, skip, start, end, total, bno, lastpage;
 	private boolean prev, next;
 	
 	private List<ReplyVO> list;
@@ -44,5 +44,23 @@ public class ReplyPageDTO {
 			this.prev = false;
 		}
 		
+	}
+	
+	public int getLastpage() {
+		
+		return (int)Math.ceil(this.total/10.0);
+	}
+	
+	public void setPage(int pageNum) {
+		log.info("---------------------a");
+		log.info(pageNum);
+		if(pageNum == -1) {
+			log.info("---------------------b");
+			this.page = (int)Math.ceil(this.total/10.0);
+			log.info(this.page);
+			return;
+		}
+		log.info("---------------------c");
+		this.page = pageNum;
 	}
 }

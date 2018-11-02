@@ -27,7 +27,7 @@
 
 	<select id="read" resultType="org.salem.domain.BoardVO">
 		select * from board where bno =
-		#{bno}
+		#{bno} and del=0
 	</select>
 
 	<update id="delete">

@@ -1,6 +1,8 @@
 package org.salem.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.salem.domain.ReplyPageDTO;
 import org.salem.domain.ReplyVO;
@@ -39,11 +41,26 @@ public class ReplyController {
 	}
 	
 	@GetMapping(value = "/pages/{bno}/{page}",produces= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(@PathVariable("page") int page, @PathVariable("bno") int bno, ReplyPageDTO dto){
-		dto.setTotal(service.getCountByBno(bno));
-		dto.setPage(page);
+	public ResponseEntity<Map<String, Object>> getList(@PathVariable("page") int page, @PathVariable("bno") int bno){
 		
-		return new ResponseEntity<>(service.getListWithPaging(dto),HttpStatus.OK);
+		ReplyPageDTO dto = new ReplyPageDTO();
+		int total = service.getCountByBno(bno);
+		//¼ø¼­ ¹Ù²î¸é ¾ÈµÊ.
+		dto.setPage(page);
+		dto.setTotal(total);
+		dto.setBno(bno);
+		
+		if(page == -1) {
+			dto.setTotal(total);
+			dto.setPage(dto.getLastpage());
+			dto.setTotal(total);
+		}
+		log.info(dto);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", service.getListWithPaging(dto));
+		resultMap.put("dto", dto);
+		
+		return new ResponseEntity<>(resultMap,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/{rno}", produces= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})

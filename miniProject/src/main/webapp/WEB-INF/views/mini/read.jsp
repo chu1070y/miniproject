@@ -189,16 +189,16 @@
 								</li>
 							</ul>
 						</div>
+						<div class="paging">
+				
+			</div>
 					</div>
 				</div>
 			</div>
 			
-			<div class="panel-footer">
-				
-			</div>
+
 			
-   
-   			
+			
  <!-- 댓글 Modal -->
    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
       aria-labelledby="myModalLabel" aria-hidden="true">
@@ -217,7 +217,7 @@
             </div>
             <div class="form-group">
             	<label>작성자</label>
-            	<input class="form-control" name="id" value="New 댓글!!!">
+            	<input class="form-control" name="id" value="salem" readonly="readonly">
             </div>
             <div class="form-group">
             	<label>작성 날짜</label>
@@ -246,7 +246,7 @@
 </div>
 
   <!-- 성공여부 Modal -->
-   <div class="modal fade" id="smyModal" tabindex="-1" role="dialog"
+   <div class="smodal fade" id="smyModal" tabindex="-1" role="dialog"
       aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
          <div class="modal-content">
@@ -292,21 +292,35 @@
 	
 	$(document).ready(function(){
 		
-		//댓글 페이징
+		
+		//댓글 페이지 버튼
 		var pageNum = 1;
-		var replyPageFooter = $(".panel-footer");
+		var replyPageFooter = $(".paging");
 		
 		function showReplyPage(dto){
 			
 			var str = "<ul class='pagination pull-right'>";
 			
 			if(dto.prev){
-				str += "<li class='page-item'><a class='page-link' href='" + (dto.start-1) + "'>Prev</a></li>";
+				str += "<li class='page-item'><a class='page-link btn btn-primary' href='" + (dto.start-1) + "'>Prev</a></li>";
 			}
 			
-			console.log("---------------dto");
-			console.log(dto);
-			console.log("---------------dto");
+			for(var i = dto.start; i <= dto.end; i++){
+				var active = dto.page ==i? "active":"";
+			
+				str += "<li class='page-item "+active+"'><a class ='btn-primary btn page-link' href='"+i+"'>" + i + "</a></li>";
+			}
+			
+			
+			if(dto.next){
+				str += "<li class='page-item'><a class = 'page-link btn btn-primary' href='" + (dto.end + 1) + "'>Next</a></li>";
+			}
+			
+			str += "</ul></div>";
+
+			console.log(str);
+			
+			replyPageFooter.html(str);
 			
 		}//end showReplyPage
 		
@@ -320,16 +334,10 @@
 			
 			console.log("show list" + page);
 			
-			replyService.getList({bno:bnoValue,page: page|| 1 }, function(list){
+			replyService.getList({bno:bnoValue,page: page|| 1 }, function(map){
 				
-				console.log("------------------?");
-				console.log(${dto});
-				console.log("------------------?");
-				
-				if(page == -1){
-					showList(1);
-					return;
-				}
+				var list = map.list;
+				var dto = map.dto;
 				
 				var str = "";
 				if(list == null || list.length ==0){
@@ -347,7 +355,7 @@
 				
 				replyUL.html(str);
 				
-				//showReplyPage(dto);
+				showReplyPage(dto);
 				
 			});//end getList
 		}//end showList
@@ -365,6 +373,7 @@
 		$("#addReplyBtn").on("click",function(e){
 			
 			modal.find("input").val("");
+			modalInputReplyer.val("salem");
 			modalInputReplyDate.closest("div").hide();
 			modal.find("button[id !='modalCloseBtn']").hide();
 			
@@ -388,10 +397,9 @@
 				modal.find("input").val("");
 				modal.modal("hide");
 				
-				showList(1);
+				showList(-1);
 			});
 		});//end modalRegisterBtn
-		
 		
 		//댓글 클릭 이벤트
 		$(".chat").on("click","li",function(e){
@@ -400,7 +408,7 @@
 			replyService.get(rno,function(reply){
 				
 				modalInputReply.val(reply.reply);
-				modalInputReplyer.val(reply.id).attr("readonly","readonly");
+				modalInputReplyer.val("salem").attr("readonly","readonly");
 				modalInputReplyDate.val(replyService.displayTime(reply.regDate)).attr("readonly","readonly");
 				modal.data("rno",reply.rno);
 				
@@ -420,7 +428,7 @@
 			replyService.update(reply,function(result){
 				alert(result);
 				modal.modal("hide");
-				showList(1);
+				showList(pageNum);
 			});
 			
 		});//end modalModBtn
@@ -433,7 +441,7 @@
 			replyService.remove(rno, function(result){
 				alert(result);
 				modal.modal("hide");
-				showList(1);
+				showList(pageNum);
 			});
 		});//end modalRemoveBtn
 		
@@ -557,8 +565,26 @@
             msg.modal();
         }
        	
+       	if(result ==='none'){
+       		$(".smodal").html("요청하신 글은 삭제되었습니다.");
+            msg.modal();
+       	}
+       	
         }
-		
+        
+		//댓글 페이징 버튼
+		replyPageFooter.on("click","li a",function(e){
+			e.preventDefault();
+			console.log("page Click");
+			
+			var targetPageNum = $(this).attr("href");
+			
+			console.log("targetPageNum: " + targetPageNum);
+			
+			pageNum = targetPageNum;
+			
+			showList(pageNum);
+		});
 
 		
 	});

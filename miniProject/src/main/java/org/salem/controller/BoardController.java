@@ -83,6 +83,8 @@ public class BoardController {
 	public void read(@ModelAttribute("page") PageDTO pageDTO, Model model) {
 		log.info("read or modify page~~~~~~~~~~~~~~~");
 		
+		BoardVO vo = service.read(pageDTO);
+		log.info(service.read(pageDTO) == null);
 		model.addAttribute("read", service.read(pageDTO));
 	}
 	
