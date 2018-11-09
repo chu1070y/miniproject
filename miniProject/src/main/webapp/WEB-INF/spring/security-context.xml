@@ -5,13 +5,19 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
+	<bean id="customAccessDenied"
+		class="org.salem.security.CustomAccessDeniedHandler"></bean>
 
 	<security:http>
 
 		<security:intercept-url pattern="/mini/*"
 			access="hasRole('ROLE_MEMBER')" />
 
+		<security:access-denied-handler
+			ref="customAccessDenied" />
+
 		<security:form-login />
+
 	</security:http>
 
 	<security:authentication-manager>
@@ -19,6 +25,10 @@
 			<security:user-service>
 				<security:user name="salem" password="{noop}123"
 					authorities="ROLE_MEMBER" />
+
+				<security:user name="salem2" password="{noop}123"
+					authorities="ROLE_MEM" />
+					
 			</security:user-service>
 		</security:authentication-provider>
 	</security:authentication-manager>
