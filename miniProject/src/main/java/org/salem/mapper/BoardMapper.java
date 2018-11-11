@@ -5,7 +5,7 @@ import java.util.List;
 import org.salem.domain.BoardVO;
 import org.salem.domain.PageDTO;
 
-public interface Boardmapper {
+public interface BoardMapper {
 	
 	public List<BoardVO> select(PageDTO pageDTO);
 	

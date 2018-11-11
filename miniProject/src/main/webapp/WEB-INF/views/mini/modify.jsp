@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -122,7 +122,7 @@
 									<input type="hidden" id="display" name="display" value="${page.display}">
 									<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
 									<input type="hidden" id="type" name="type" value="${page.type}">
-									
+									<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 									</form>
 
 
@@ -158,6 +158,7 @@
 			<input type="hidden" name="bno" value="${read.bno}">
 			<input type="hidden" id="keyword" name="keyword" value="${page.keyword}">
 			<input type="hidden" id="type" name="type" value="${page.type}">
+			<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 		
 		
@@ -209,7 +210,6 @@
 	} 
 
     $(document).ready(function(){
-	
 
 	
 	//이미지 사리지는 이벤트
@@ -248,7 +248,7 @@
 		$(".uploadResult ul li").each(function(i,obj){
 			
 			var jobj = $(obj);
-			
+			 
 			console.dir(jobj);
 			
 			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
@@ -378,19 +378,20 @@
 	
 	var cloneObj = $(".uploadDiv").clone();
 	
+	//csrf처리
+	var csrfHearderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
 	//Upload 버튼
 	$("#uploadBtn").on("click",function(e){
 		
 		var formData = new FormData();
 		var inputFile = $("input[name='uploadfile']");
 		var files = inputFile[0].files;
-		
 		console.log(files);
-		
 		
 		//form태그에 파일 추가하기
 		for(var i = 0; i < files.length; i++){
-			
 			if(!checkExtension(files[i].name, files[i].size)){
 				return false;
 			}
@@ -403,11 +404,13 @@
 			url: '/upload/uploadAjaxAction',
 			processData : false,
 			contentType : false,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(csrfHearderName,csrfTokenValue);
+			},
 			data : formData,
 			type : 'POST',
 			success : function(result){
 				console.log(result);
-				
 				showUploadedFile(result);
 				
 				$(".uploadDiv").html(cloneObj.html());

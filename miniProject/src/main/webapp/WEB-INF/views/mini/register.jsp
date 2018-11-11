@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -367,6 +366,9 @@ $(document).ready(function(){
 	}
 	
 	var cloneObj = $(".uploadDiv").clone();
+	//csrf처리
+	var csrfHearderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
 	
 	//Upload 버튼
 	$("#uploadBtn").on("click",function(e){
@@ -392,6 +394,9 @@ $(document).ready(function(){
 			url: '/upload/uploadAjaxAction',
 			processData : false,
 			contentType : false,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(csrfHearderName,csrfTokenValue);
+			},
 			data : formData,
 			type : 'POST',
 			success : function(result){

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.salem.domain.BoardVO;
 import org.salem.domain.PageDTO;
-import org.salem.mapper.Boardmapper;
+import org.salem.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,7 +19,7 @@ public class DataSourceTests {
 
 	
 	@Setter(onMethod_ = @Autowired)
-	private Boardmapper mapper;
+	private BoardMapper mapper;
 	
 	@Test
 	public void test1() {

@@ -7,29 +7,29 @@
 
 	<bean id="customAccessDenied"
 		class="org.salem.security.CustomAccessDeniedHandler"></bean>
+	<bean id="customLoginSuccess"
+		class="org.salem.security.CustomLoginSuccessHandler"></bean>
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
 	<security:http>
 
 		<security:intercept-url pattern="/mini/*"
 			access="hasRole('ROLE_MEMBER')" />
 
-		<security:access-denied-handler
+ 		<security:access-denied-handler
 			ref="customAccessDenied" />
 
-		<security:form-login />
+		<security:form-login login-page="/login/login" authentication-success-handler-ref="customLoginSuccess"/>
 
 	</security:http>
 
 	<security:authentication-manager>
 		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="salem" password="{noop}123"
-					authorities="ROLE_MEMBER" />
-
-				<security:user name="salem2" password="{noop}123"
-					authorities="ROLE_MEM" />
-					
-			</security:user-service>
+			<security:jdbc-user-service data-source-ref="dataSource"
+			users-by-username-query="select "/>
+			
+			<security:password-encoder ref="bcryptPasswordEncoder" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 

@@ -370,6 +370,15 @@
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
 		
+		//csrf처리
+		var csrfHearderName = "${_csrf.headerName}";
+		var csrfTokenValue = "${_csrf.token}";
+		
+		$(document).ajaxSend(function(e,xhr,options){
+			xhr.setRequestHeader(csrfHearderName, csrfTokenValue);
+		});
+		
+		//댓글 추가
 		$("#addReplyBtn").on("click",function(e){
 			
 			modal.find("input").val("");
@@ -383,6 +392,7 @@
 		});
 		
 		//댓글 등록 및 목록 갱신
+		
 		modalRegisterBtn.on("click",function(e){
 			
 			var reply = {

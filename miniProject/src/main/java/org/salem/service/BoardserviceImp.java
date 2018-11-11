@@ -6,7 +6,7 @@ import org.salem.domain.BoardAttachVO;
 import org.salem.domain.BoardVO;
 import org.salem.domain.PageDTO;
 import org.salem.mapper.BoardAttachMapper;
-import org.salem.mapper.Boardmapper;
+import org.salem.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 public class BoardserviceImp implements Boardservice{
 	
 	@Setter(onMethod_ = @Autowired)
-	private Boardmapper mapper;
+	private BoardMapper mapper;
 	
 	@Setter(onMethod_ = @Autowired)
 	private BoardAttachMapper attachMapper;

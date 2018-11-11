@@ -31,7 +31,7 @@ public class ReplyMapperTests {
 	public void testCreate() {
 		
 		ReplyVO reply = new ReplyVO();
-		reply.setBno(1047);
+		reply.setBno(6);
 		reply.setId("salem");
 		reply.setReply("댓글만들기 시작123");
 		
