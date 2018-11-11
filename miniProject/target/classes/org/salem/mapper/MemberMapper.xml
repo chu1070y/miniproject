@@ -5,6 +5,28 @@
   
   <mapper namespace="org.salem.mapper.MemberMapper">
   
+  	<resultMap type="org.salem.domain.MemberVO" id="memberMap">
   	
+  	<id property="id" column="id"/>
+  	<result property="id" column="id"/>
+  	<result property="pw" column="pw"/>
+  	<result property="name" column="name"/>
+  	<result property="regdate" column="regdate"/>
+  	<result property="updatedate" column="updatedate"/>
+  	<collection property="authList" resultMap="authMap"></collection>
+  	
+  	</resultMap>
+  	
+  	<resultMap type="org.salem.domain.AuthVO" id="authMap">
+  	<result property="id" column="id"/>
+  	<result property="auth" column="auth"/>
+  	</resultMap>
+  	
+  	<select id="read" resultMap="memberMap">
+  		select member.id, pw, name, regdate, updatedate, del,auth
+		from member left outer join member_auth auth
+		on member.id = auth.id
+		where member.id = #{id}
+  	</select>
   
   </mapper>

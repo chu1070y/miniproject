@@ -12,22 +12,24 @@
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
+	<bean id="customUserDetailsService"
+		class="org.salem.security.CustomUserDetailsService"></bean>
+
 	<security:http>
 
 		<security:intercept-url pattern="/mini/*"
 			access="hasRole('ROLE_MEMBER')" />
 
- 		<security:access-denied-handler
-			ref="customAccessDenied" />
+<!--  		<security:access-denied-handler
+			ref="customAccessDenied" /> -->
 
 		<security:form-login login-page="/login/login" authentication-success-handler-ref="customLoginSuccess"/>
 
 	</security:http>
 
 	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:jdbc-user-service data-source-ref="dataSource"
-			users-by-username-query="select "/>
+		<security:authentication-provider user-service-ref="customUserDetailsService">
+		
 			
 			<security:password-encoder ref="bcryptPasswordEncoder" />
 		</security:authentication-provider>
