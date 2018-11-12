@@ -23,7 +23,7 @@
   	</resultMap>
   	
   	<select id="read" resultMap="memberMap">
-  		select member.id, pw, name, regdate, updatedate, del,auth
+  		select member.id, pw, regdate, updatedate, del, auth
 		from member left outer join member_auth auth
 		on member.id = auth.id
 		where member.id = #{id}

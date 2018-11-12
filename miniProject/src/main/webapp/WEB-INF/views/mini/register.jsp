@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -112,7 +113,8 @@
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Writer</label>
 										<div class="col-lg-10">
-											<input type="text" class="form-control" id="id" name="id" value="salem" readonly="readonly">
+											<input type="text" class="form-control" id="id" name="id" 
+												value="<sec:authentication property='principal.username'/>" readonly="readonly">
 										</div>
 									</div>
 

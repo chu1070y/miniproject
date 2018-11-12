@@ -7,7 +7,7 @@
 
 	<insert id="replyInsert">
 		insert into reply(bno,id,reply)
-		values(#{bno},"salem",#{reply})
+		values(#{bno},#{id},#{reply})
 	</insert>
 
 	<select id="getreplyList" resultType="org.salem.domain.ReplyVO">

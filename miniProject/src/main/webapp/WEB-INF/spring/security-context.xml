@@ -20,11 +20,17 @@
 		<security:intercept-url pattern="/mini/*"
 			access="hasRole('ROLE_MEMBER')" />
 
-<!--  		<security:access-denied-handler
-			ref="customAccessDenied" /> -->
+  		<security:access-denied-handler
+			ref="customAccessDenied" /> 
 
 		<security:form-login login-page="/login/login" authentication-success-handler-ref="customLoginSuccess"/>
-
+		
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+		
+		<security:logout logout-url="/login/logout" invalidate-session="true" delete-cookies="remember-me,JSESSIONID"/>
+		
+		
+		
 	</security:http>
 
 	<security:authentication-manager>

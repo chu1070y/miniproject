@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,36 +31,51 @@
   <link href="/resources/css/style.css" rel="stylesheet">
   <link href="/resources/css/style-responsive.css" rel="stylesheet" />
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
-  <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- =======================================================
-      Theme Name: NiceAdmin
-      Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-      Author: BootstrapMade
-      Author URL: https://bootstrapmade.com
-    ======================================================= -->
-</head>
-
 <body class="login-img3-body">
 
   <div class="container">
 
-    <form class="login-form" action="/login/login">
+    <form class="login-form" action="index.html">
       <div class="login-wrap">
         <p class="login-img"><i class="icon_lock_alt"></i></p>
-        <div>
-        	<h4>접근권한이 없거나 로그인 정보가 틀립니다.</h4>
-        </div>
-        <button class="btn btn-info btn-lg btn-block" type="submit">다시 로그인하기</button>
+
+        <button class="btn btn-primary btn-lg btn-block" id="logoutBtn" type="submit">Logout</button>
+
       </div>
     </form>
   </div>
 
+		<form class="actionform">
+			<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		</form>
+
+<script>
+
+$(document).ready(function(){
+	
+	var actionform = $(".actionform");
+	
+	
+	$("#logoutBtn").on("click",function(e){
+		e.preventDefault();
+		
+		var str = "";
+
+		str += "<input type='hidden' id='csrfToken' name='${_csrf.parameterName}' value='${_csrf.token}' />";
+		
+		actionform.append(str)
+		.attr("action","/login/logout").attr("method","post").submit();
+	});
+	
+	
+	
+});
+
+</script>
 
 </body>
 
 </html>
+
+
+

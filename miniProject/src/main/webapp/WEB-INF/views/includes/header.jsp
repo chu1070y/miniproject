@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,63 +79,11 @@
         <!-- notificatoin dropdown start-->
         <ul class="nav pull-right top-menu">
 
-          <!-- task notificatoin start -->
-          <li id="task_notificatoin_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-task-l"></i>
-                            <span class="badge bg-important"></span>
-                        </a>
+          <li id="alert_notificatoin_bar">
+              <a id="logout" href="/login/logout"><i class="icon_key_alt"></i> 로그아웃</a>
 
           </li>
-          <!-- task notificatoin end -->
-          <!-- inbox notificatoin start-->
-          <li id="mail_notificatoin_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-envelope-l"></i>
-                            <span class="badge bg-important"></span>
-                        </a>
-
-          </li>
-          <!-- inbox notificatoin end -->
-          <!-- alert notification start-->
-          <li id="alert_notificatoin_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-
-                            <i class="icon-bell-l"></i>
-                            <span class="badge bg-important"></span>
-                        </a>
-            
-          </li>
-          <!-- alert notification end-->
-          <!-- user login dropdown start-->
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="profile-ava">
-                           
-                            </span>
-                            <span class="username">Yeon-Hoon Chu</span>
-                            <b class="caret"></b>
-                        </a>
-            <ul class="dropdown-menu extended logout">
-              <div class="log-arrow-up"></div>
-              <li class="eborder-top">
-                <a href="list?page=1&display=10&keyword=salem&type=w"><i class="icon_profile"></i> salem-추연훈</a>
-              </li>
-              <li>
-                <a href="list?page=1&display=10&keyword=gaiga&type=w"><i class="icon_mail_alt"></i> gaiga-김가익</a>
-              </li>
-              <li>
-                <a href="list?page=1&display=10&keyword=유명bj&type=w"><i class="icon_clock_alt"></i> 유명bj-박고은</a>
-              </li>
-              <li>
-                <a href="list?page=1&display=10&keyword=하쉴&type=w"><i class="icon_chat_alt"></i> 하쉴-문지인</a>
-              </li>
-              <li>
-                <a href="list?page=1&display=10&keyword=casper&type=w"><i class="icon_key_alt"></i> casper-박가영</a>
-              </li>
-            </ul>
-          </li>
-          <!-- user login dropdown end -->
+          
         </ul>
         <!-- notificatoin dropdown end-->
       </div>
@@ -152,9 +101,23 @@
                           <span>Dashboard</span>
                       </a>
           </li>
+          
 
         </ul>
         <!-- sidebar menu end-->
       </div>
     </aside>
     <!--sidebar end-->
+    <script>
+    $(document).ready(function(){
+    	
+    	$(".dropdown-menu li #logout").on("click",function(e){
+    		e.preventDefault();
+
+    		actionform.attr("action","/login/logout").attr("method","get").submit();
+    	});
+    	
+    });
+    
+    </script>
+

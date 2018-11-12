@@ -127,8 +127,11 @@
 									
 										<!-- Buttons -->
 										<div class="col-lg-offset-2 col-lg-9">
-
-											<button id="goModify" type="submit" class="btn btn-primary">수정하기</button>
+											
+											<sec:authentication property="principal" var="pinfo"/>
+												<c:if test="${pinfo.username eq read.id}">
+													<button id="goModify" type="submit" class="btn btn-primary">수정하기</button>
+												</c:if>
 											<button id="goList" type="submit" class="btn btn-default golist">목록으로</button>
 
 										</div>
@@ -217,7 +220,7 @@
             </div>
             <div class="form-group">
             	<label>작성자</label>
-            	<input class="form-control" name="id" value="salem" readonly="readonly">
+            	<input class="form-control" name="id" value="<sec:authentication property='principal.username'/>" readonly="readonly">
             </div>
             <div class="form-group">
             	<label>작성 날짜</label>
@@ -226,10 +229,13 @@
             
             
             <div class="modal-footer">
-        	   <button id="modalModBtn" type="button" class="btn btn-warning" data-dismiss="modal">수정하기</button>
-               <button id="modalRemoveBtn" type="button" class="btn btn-danger" data-dismiss="modal">삭제하기</button>
-               <button id="modalRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">등록하기</button>
-               <button id="modalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">창 닫기</button>
+            
+               <sec:authentication property="principal" var="pinfo"/>
+						
+        	 	<button id="modalModBtn" type="button" class="btn btn-warning" data-dismiss="modal">수정하기</button>
+           		<button id="modalRemoveBtn" type="button" class="btn btn-danger" data-dismiss="modal">삭제하기</button>
+                <button id="modalRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">등록하기</button>
+                <button id="modalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">창 닫기</button>
             </div>
          </div>
          <!-- /.modal-content -->
@@ -276,7 +282,7 @@
 			<input type="hidden" id="type" name="type" value="${page.type}">
 		</form>
 
-
+<input type="hidden" id="principal" value="<sec:authentication property='principal.username'/>">
 
 
 		<!--main content end-->
@@ -292,6 +298,7 @@
 	
 	$(document).ready(function(){
 		
+		var principal = $("#principal").val();
 		
 		//댓글 페이지 버튼
 		var pageNum = 1;
@@ -365,7 +372,7 @@
 		var modalInputReply = modal.find("input[name='reply']");
 		var modalInputReplyer = modal.find("input[name='id']");
 		var modalInputReplyDate = modal.find("input[name='regDate']");
-		
+
 		var modalModBtn = $("#modalModBtn");
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
@@ -382,7 +389,7 @@
 		$("#addReplyBtn").on("click",function(e){
 			
 			modal.find("input").val("");
-			modalInputReplyer.val("salem");
+			modalInputReplyer.val("<sec:authentication property='principal.username'/>");
 			modalInputReplyDate.closest("div").hide();
 			modal.find("button[id !='modalCloseBtn']").hide();
 			
@@ -418,13 +425,19 @@
 			replyService.get(rno,function(reply){
 				
 				modalInputReply.val(reply.reply);
-				modalInputReplyer.val("salem").attr("readonly","readonly");
+				modalInputReplyer.val(reply.id).attr("readonly","readonly");
 				modalInputReplyDate.val(replyService.displayTime(reply.regDate)).attr("readonly","readonly");
 				modal.data("rno",reply.rno);
 				
 				modal.find("button[id !='modalCloseBtn']").hide();
 				modalModBtn.show();
 				modalRemoveBtn.show();
+				
+
+				if(reply.id !== principal){
+					modalRemoveBtn.hide();
+					modalModBtn.hide();
+				}
 				
 				$("#modal").modal("show");
 			});

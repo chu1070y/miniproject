@@ -43,8 +43,9 @@ public class MemberTests {
 	}
 	
 	@Test
-	public void testInsertMember() {
-		String sql = "insert into member(id,pw,name) values(?,?,?)";
+	public void testUpdate() {
+		
+		String sql = "UPDATE member SET pw=?";
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -53,9 +54,30 @@ public class MemberTests {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setString(1, "admin");
-			pstmt.setString(2, pwencoder.encode("admin"));
-			pstmt.setString(3, "°ü¸®ÀÚ");
+			pstmt.setString(1, pwencoder.encode("123"));
+			
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(pstmt != null) {try{pstmt.close();}catch(Exception e){}}
+			if(con != null) {try{con.close();}catch(Exception e){}}
+		}
+	}
+	
+	@Test
+	public void testInsertMember() {
+		String sql = "insert into member(id,pw) values(?,?)";
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(sql);
+			
+			pstmt.setString(1, "admin2");
+			pstmt.setString(2, pwencoder.encode("123"));
 			
 			pstmt.executeUpdate();
 		}catch (Exception e) {
@@ -77,7 +99,7 @@ public class MemberTests {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setString(1, "admin");
+			pstmt.setString(1, "admin2");
 			pstmt.setString(2, "ROLE_MEMBER");
 			
 			pstmt.executeUpdate();

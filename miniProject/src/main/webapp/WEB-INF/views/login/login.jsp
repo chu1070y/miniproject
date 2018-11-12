@@ -35,65 +35,28 @@
 
   <div class="container">
 
-    <form class="login-form" action="index.html">
+    <form class="login-form" action="/login" method="post">
+    <input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    
       <div class="login-wrap">
         <p class="login-img"><i class="icon_lock_alt"></i></p>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_profile"></i></span>
-          <input id="inputId" type="text" class="form-control" placeholder="Username" autofocus>
+          <input id="inputId" name="username" type="text" class="form-control" placeholder="Username" autofocus>
         </div>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-          <input id="inputPw" type="password" class="form-control" placeholder="Password">
+          <input id="inputPw" name="password" type="password" class="form-control" placeholder="Password">
         </div>
         <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
+                <input type="checkbox" name="remember-me" > Remember me
                 <span class="pull-right"> <a href="#"> Forgot Password?</a></span>
-            </label>
+        </label>
         <button class="btn btn-primary btn-lg btn-block" id="loginBtn" type="submit">Login</button>
+        </form>
         <button class="btn btn-info btn-lg btn-block" id="signupBtn" type="submit">Signup</button>
       </div>
-    </form>
-    <div class="text-right">
-      <div class="credits">
-          <!--
-            All the links in the footer should remain intact.
-            You can delete the links only if you purchased the pro version.
-            Licensing information: https://bootstrapmade.com/license/
-            Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
-          -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-    </div>
-  </div>
-
-		<form class="actionform">
-			<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</form>
-
-<script>
-
-$(document).ready(function(){
-	
-	var actionform = $(".actionform");
-	
-	$("#loginBtn").on("click",function(e){
-		e.preventDefault();
-		
-		var str = "";
-		
-		str += "<input type='hidden' name='username' value="+$("#inputId").val()+">";
-		str += "<input type='hidden' name='password' value="+$("#inputPw").val()+">";
-		
-		actionform.append(str)
-		.attr("action","/login").attr("method","post").submit();
-	});
-	
-	
-	
-});
-
-</script>
+    
 
 </body>
 

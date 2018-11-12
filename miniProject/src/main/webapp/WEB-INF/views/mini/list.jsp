@@ -17,9 +17,7 @@
 				<ol class="breadcrumb">
 					<li><i class="fa fa-home"></i><a href="list">Home</a></li>
 					<li><i class="fa fa-laptop"></i>Dashboard</li>
-					<li>
-
-                    
+					<li><i class="icon_profile"></i><sec:authentication property='principal.username'/>님 환영합니다!                    
                     </li>
 				</ol>
 			</div>
