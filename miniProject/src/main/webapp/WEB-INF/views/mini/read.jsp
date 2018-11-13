@@ -228,6 +228,30 @@
             </div>
             
             
+               <!-- 댓글 첨부파일 -->
+            <div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">사진 넣기</div>
+						<div class="panel-body">
+							<div class=" col-lg-2">
+								<input type='file' name='uploadfile' multiple>
+							</div>
+							<br/><br/>
+							<div class=' col-lg-12'>
+								<ul>
+				
+								</ul>
+							</div>
+			
+							<button id='replyImage'>사진 넣기</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+            
+            
             <div class="modal-footer">
             
                <sec:authentication property="principal" var="pinfo"/>
@@ -377,6 +401,8 @@
 		var modalRemoveBtn = $("#modalRemoveBtn");
 		var modalRegisterBtn = $("#modalRegisterBtn");
 		
+		var replyImageBtn = $("#replyImage");
+		
 		//csrf처리
 		var csrfHearderName = "${_csrf.headerName}";
 		var csrfTokenValue = "${_csrf.token}";
@@ -394,7 +420,7 @@
 			modal.find("button[id !='modalCloseBtn']").hide();
 			
 			modalRegisterBtn.show();
-			
+			replyImageBtn.show();
 			$("#modal").modal("show");
 		});
 		

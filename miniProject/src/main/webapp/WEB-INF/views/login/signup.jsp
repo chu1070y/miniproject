@@ -2,10 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+  <script src="/resources/js/jquery.js"></script>
+  <script src="/resources/js/jquery-ui-1.10.4.min.js"></script>
+  
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,36 +30,61 @@
   <link href="/resources/css/style.css" rel="stylesheet">
   <link href="/resources/css/style-responsive.css" rel="stylesheet" />
 
-
 <body class="login-img3-body">
 
   <div class="container">
 
-    <form class="login-form" action="/login" method="post">
+    <form class="login-form" action="/login/signup" method="post">
     <input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
     
       <div class="login-wrap">
-        <p class="login-img"><i class="icon_lock_alt"></i></p>
+        <p class="login-img"><i class="icon_lock_alt"></i> 회원가입</p>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_profile"></i></span>
-          <input id="inputId" name="username" type="text" class="form-control" placeholder="ID" autofocus>
+          <input id="inputId" name="id" type="text" class="form-control" placeholder="ID" autofocus>
         </div>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-          <input id="inputPw" name="password" type="password" class="form-control" placeholder="Password">
+          <input id="inputPw" name="pw" type="password" class="form-control" placeholder="Password">
         </div>
-        <label class="checkbox">
-                <input type="checkbox" name="remember-me" > Remember me
-                <span class="pull-right"> <a href="#"> Forgot Password?</a></span>
-        </label>
-        <button class="btn btn-primary btn-lg btn-block" id="loginBtn" type="submit">로그인</button>
+
+        <button class="btn btn-info btn-lg btn-block" id="signupBtn" type="submit">가입하기</button>
         </form>
-        <a href="/login/signup" class="btn btn-info btn-lg btn-block" id="signupBtn" type="button">회원가입</a>
       </div>
       
 
-
 </body>
+
+<script>
+
+$(document).ready(function(){
+	
+    var result = '<c:out value="${result}"/>';
+    
+    checkModal(result);
+    history.replaceState({}, null, null);
+    
+    function checkModal(result){
+    
+   	console.log(result === ''||history.state);
+   	
+   	if(result === ''||history.state){
+   		 return;
+   	}
+   	
+   	if (result === 'blank') {
+        alert("아이디나 패스워드를 입력해주세요.");
+    }
+   	 
+   	if (result === 'fail') {
+        alert("해당 아이디는 존재합니다.");
+    }
+   	
+    }
+	
+});
+
+</script>
 
 </html>
 

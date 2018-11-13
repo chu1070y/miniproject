@@ -57,13 +57,13 @@ public class BoardController {
 	}
 	
 	@GetMapping("/register")
-	@PreAuthorize("isAuthenticated()")
+//	@PreAuthorize("isAuthenticated()")
 	public void register() {
 		log.info("register page~~~~~~~~~~~~~~~");
 	}
 	
 	@PostMapping("/register")
-	@PreAuthorize("isAuthenticated()")
+//	@PreAuthorize("isAuthenticated()")
 	public String registerPOST(BoardVO vo,RedirectAttributes rttr) {
 		log.info("register post.....................");
 		
@@ -97,7 +97,7 @@ public class BoardController {
 		List<BoardAttachVO> attachList = service.getAttachList(pageDTO.getBno());
 		
 		if(service.remove(pageDTO)) {
-			//Ã·ºÎÆÄÀÏ »èÁ¦
+			//Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			deleteFiles(attachList);
 			rttr.addFlashAttribute("result","success");
 		}

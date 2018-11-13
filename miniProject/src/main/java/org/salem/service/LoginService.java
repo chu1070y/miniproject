@@ -1,11 +1,9 @@
-package org.salem.mapper;
+package org.salem.service;
 
 import org.salem.domain.AuthVO;
 import org.salem.domain.MemberVO;
 
-public interface MemberMapper {
-
-	public MemberVO read(String id);
+public interface LoginService {
 	
 	public int checkId(MemberVO vo); 
 	

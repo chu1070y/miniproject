@@ -39,7 +39,7 @@
       <div class="login-wrap">
         <p class="login-img"><i class="icon_lock_alt"></i></p>
 
-        <button class="btn btn-primary btn-lg btn-block" id="logoutBtn" type="submit">Logout</button>
+        <button class="btn btn-primary btn-lg btn-block" id="logoutBtn" type="submit">로그아웃</button>
 
       </div>
     </form>

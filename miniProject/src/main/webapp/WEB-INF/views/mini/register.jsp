@@ -101,6 +101,7 @@
 							
 								<!-- Edit profile form (not working)-->
 								<form class='regform'>
+								<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 									<!-- Title -->
 									<div class="form-group">
 										<label class="control-label col-lg-2" for="title">Title</label>
@@ -298,6 +299,7 @@ $(document).ready(function(){
 			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
 			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
 			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data("type")+"'>";
+
 			
 		});
 
