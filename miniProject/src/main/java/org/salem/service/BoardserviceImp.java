@@ -114,4 +114,10 @@ public class BoardserviceImp implements Boardservice{
 		return mapper.delete(pageDTO)==1;
 	}
 
+	@Override
+	public int view(PageDTO pageDTO) {
+		// TODO Auto-generated method stub
+		return mapper.view(pageDTO);
+	}
+
 }

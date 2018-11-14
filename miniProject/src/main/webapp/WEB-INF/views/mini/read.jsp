@@ -259,6 +259,7 @@
         	 	<button id="modalModBtn" type="button" class="btn btn-warning" data-dismiss="modal">수정하기</button>
            		<button id="modalRemoveBtn" type="button" class="btn btn-danger" data-dismiss="modal">삭제하기</button>
                 <button id="modalRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">등록하기</button>
+                <button id="modalreReplyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">대댓글 등록하기</button>
                 <button id="modalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">창 닫기</button>
             </div>
          </div>
@@ -381,7 +382,8 @@
 					str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 					str += "<div><div ><strong class='primary-font'>["+list[i].rno+"]"+list[i].id+"</strong>";
 					str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small></div>";
-					str += "<p>"+list[i].reply+"</p></div></li>";
+					str += "<p>"+list[i].reply+"</p>";
+					str += "<button class='btn btn-warning pull-right' data-info="+list[i].rno+" id='reReplyBtn'>대댓글</button></div></li>";
 				}//end for
 				
 				replyUL.html(str);
@@ -403,6 +405,9 @@
 		
 		var replyImageBtn = $("#replyImage");
 		
+		//대댓글 버튼
+		var reReplyRegisterBtn = $(modalreReplyRegisterBtn);
+		
 		//csrf처리
 		var csrfHearderName = "${_csrf.headerName}";
 		var csrfTokenValue = "${_csrf.token}";
@@ -411,7 +416,7 @@
 			xhr.setRequestHeader(csrfHearderName, csrfTokenValue);
 		});
 		
-		//댓글 추가
+		//댓글 추가 버튼 클릭
 		$("#addReplyBtn").on("click",function(e){
 			
 			modal.find("input").val("");
@@ -424,8 +429,32 @@
 			$("#modal").modal("show");
 		});
 		
-		//댓글 등록 및 목록 갱신
+		//대댓글 추가 버튼 클릭
+		$(".chat").on("click","li #reReplyBtn",function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			console.log("대댓글 들어왔음!!");
+			
+			var reReplyBtn = $(this);
+			
+			$("#myModalLabel").attr("value",reReplyBtn.data("info")+"번 대댓글 작성");
+			
+			modal.find("input").val("");
+			modalInputReplyer.val("<sec:authentication property='principal.username'/>");
+			modalInputReplyDate.closest("div").hide();
+			modal.find("button[id !='modalCloseBtn']").hide();
+			
+			reReplyRegisterBtn.show();
+			replyImageBtn.show();
+			$("#modal").modal("show");
+		});
 		
+		//대댓글 등록 및 목록 갱신
+		reReplyRegisterBtn.on("click",function(e){
+			
+		});
+		
+		//댓글 등록 및 목록 갱신
 		modalRegisterBtn.on("click",function(e){
 			
 			var reply = {
@@ -625,7 +654,6 @@
         }
         
         
-        
 		//댓글 페이징 버튼
 		replyPageFooter.on("click","li a",function(e){
 			e.preventDefault();
@@ -639,6 +667,9 @@
 			
 			showList(pageNum);
 		});
+		
+		
+
 
 		
 	});

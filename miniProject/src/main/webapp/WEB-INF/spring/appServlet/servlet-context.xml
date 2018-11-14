@@ -26,14 +26,14 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<beans:bean id="loginInter"
-		class="org.salem.interceptor.LoginInterceptor"></beans:bean>
+	<beans:bean id="BoardInter"
+		class="org.salem.interceptor.BoardInterceptor"></beans:bean>
 	
 	<!-- 인터셉터 동작시키는 것 -->
 	<interceptors>
 		<interceptor>
-			<mapping path="/login/login" />
-			<beans:ref bean="loginInter" />
+			<mapping path="/mini/read" />
+			<beans:ref bean="BoardInter" />
 		</interceptor>
 	</interceptors>
 

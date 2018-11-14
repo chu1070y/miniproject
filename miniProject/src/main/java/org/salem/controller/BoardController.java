@@ -1,10 +1,11 @@
 package org.salem.controller;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import javax.servlet.http.Cookie;
 
 import org.salem.domain.BoardAttachVO;
 import org.salem.domain.BoardVO;
@@ -14,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,9 +79,44 @@ public class BoardController {
 		return "redirect:/mini/list";
 	}
 	
-	@GetMapping({"/read","/modify"})
-	public void read(@ModelAttribute("page") PageDTO pageDTO, Model model) {
-		log.info("read or modify page~~~~~~~~~~~~~~~");
+	@GetMapping("/read")
+	public void read(@ModelAttribute("page") PageDTO pageDTO, Model model, 
+			@CookieValue(value="GiveMeCookies",required=false) String cookie) {
+		log.info("read page~~~~~~~~~~~~~~~");
+		
+		BoardVO vo = service.read(pageDTO);
+		
+		log.info("cookie value: " + cookie);
+		
+		if(vo == null) {
+			model.addAttribute("result", "none");
+		}
+		
+		model.addAttribute("read", vo);
+		
+		
+		//view 처리
+		
+		if(cookie != null) {
+			
+			String[] arr = cookie.split("_");
+			
+			for(String str : arr) {
+				
+				if(str.equals(String.valueOf(pageDTO.getBno()))) {
+					return;
+				}
+			}
+			
+		}
+		
+		
+		service.view(pageDTO);
+	}
+	
+	@GetMapping("/modify")
+	public void modify(@ModelAttribute("page") PageDTO pageDTO, Model model) {
+		log.info("modify page~~~~~~~~~~~~~~~");
 		
 		BoardVO vo = service.read(pageDTO);
 		

@@ -90,5 +90,10 @@ on board.bno = replyCnt.bno
 		limit #{skip}, #{display}
 
 	</select>
+	
+	<update id="view">
+		update board set view = view + 1
+		where bno=#{bno}
+	</update>
 
 </mapper>

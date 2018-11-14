@@ -35,9 +35,7 @@ public class ReplyController {
 	public ResponseEntity<String> create(@RequestBody ReplyVO reply){
 		
 		int insertCount = service.replyInsert(reply);
-		log.info("================");
-		log.info(reply);
-		log.info("================");
+
 		return insertCount==1? new ResponseEntity<>("success",HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -47,7 +45,7 @@ public class ReplyController {
 		
 		ReplyPageDTO dto = new ReplyPageDTO();
 		int total = service.getCountByBno(bno);
-		//¼ø¼­ ¹Ù²î¸é ¾ÈµÊ.
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ ï¿½Èµï¿½.
 		dto.setPage(page);
 		dto.setTotal(total);
 		dto.setBno(bno);
@@ -57,7 +55,7 @@ public class ReplyController {
 			dto.setPage(dto.getLastpage());
 			dto.setTotal(total);
 		}
-		log.info(dto);
+		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("list", service.getListWithPaging(dto));
 		resultMap.put("dto", dto);

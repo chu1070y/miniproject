@@ -25,4 +25,6 @@ public interface Boardservice {
 	public List<BoardAttachVO> getAttachList(int bno);
 	
 	public boolean remove(PageDTO pageDTO);
+	
+	public int view(PageDTO pageDTO);
 }

@@ -22,4 +22,6 @@ public interface BoardMapper {
 	public List<BoardVO> search(PageDTO pageDTO);
 	
 	public int key();
+	
+	public int view(PageDTO pageDTO);
 }

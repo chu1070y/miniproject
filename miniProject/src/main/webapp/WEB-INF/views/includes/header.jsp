@@ -108,16 +108,5 @@
       </div>
     </aside>
     <!--sidebar end-->
-    <script>
-    $(document).ready(function(){
-    	
-    	$(".dropdown-menu li #logout").on("click",function(e){
-    		e.preventDefault();
 
-    		actionform.attr("action","/login/logout").attr("method","get").submit();
-    	});
-    	
-    });
-    
-    </script>
 

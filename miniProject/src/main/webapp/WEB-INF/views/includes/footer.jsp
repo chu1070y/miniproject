@@ -42,8 +42,19 @@
     <script src="/resources/js/jquery.slimscroll.min.js"></script>
     
     <script>
+    $(document).ready(function(){
+    	
+    	$(".dropdown-menu li #logout").on("click",function(e){
+    		e.preventDefault();
 
-    </script>
+    		actionform.attr("action","/login/logout").attr("method","get").submit();
+    	});
+    	
+    });
+    
+    </script>    
+
+
 
 </body>
 

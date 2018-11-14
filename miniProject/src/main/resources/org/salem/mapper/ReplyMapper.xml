@@ -6,8 +6,8 @@
 <mapper namespace="org.salem.mapper.ReplyMapper">
 
 	<insert id="replyInsert">
-		insert into reply(bno,id,reply)
-		values(#{bno},#{id},#{reply})
+		insert into reply(bno,id,reply,gno)
+		values(#{bno},#{id},#{reply},#{bno})
 	</insert>
 
 	<select id="getreplyList" resultType="org.salem.domain.ReplyVO">
