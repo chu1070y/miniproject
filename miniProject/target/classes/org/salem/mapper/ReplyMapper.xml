@@ -6,8 +6,8 @@
 <mapper namespace="org.salem.mapper.ReplyMapper">
 
 	<insert id="replyInsert">
-		insert into reply(bno,id,reply,gno)
-		values(#{bno},#{id},#{reply},#{bno})
+		insert into reply(bno,id,reply,gno,ord)
+		values(#{bno},#{id},#{reply},#{rno},#{ord})
 	</insert>
 
 	<select id="getreplyList" resultType="org.salem.domain.ReplyVO">
@@ -24,7 +24,7 @@
 	</update>
 	
 	<select id="getListWithPaging" resultType="org.salem.domain.ReplyVO">
-		select * from reply where del = 0 and bno=#{bno} limit #{skip}, 10
+		select * from reply where del = 0 and bno=#{bno} order by gno, regdate limit #{skip}, 10
 	</select>
 	
 	<select id="replyRead" resultType="org.salem.domain.ReplyVO">
@@ -34,4 +34,8 @@
 	<select id="getCountByBno" resultType="int">
 		select count(*) from reply where bno = #{bno} and del=0 
 	</select>
+	
+	<update id="noPrideUpdate">
+		update reply set gno = rno  where ord = 0
+	</update>
 </mapper>

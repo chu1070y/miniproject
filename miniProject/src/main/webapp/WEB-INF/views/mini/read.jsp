@@ -210,6 +210,7 @@
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal"
                   aria-hidden="true">&times;</button>
+               <input type="hidden" id="rnoValue" value="rnoValue">
                <h4 class="modal-title" id="myModalLabel">댓글 작성</h4>
             </div>
             <div class="modal-body"></div>
@@ -228,28 +229,7 @@
             </div>
             
             
-               <!-- 댓글 첨부파일 -->
-            <div class="row">
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						<div class="panel-heading">사진 넣기</div>
-						<div class="panel-body">
-							<div class=" col-lg-2">
-								<input type='file' name='uploadfile' multiple>
-							</div>
-							<br/><br/>
-							<div class=' col-lg-12'>
-								<ul>
-				
-								</ul>
-							</div>
-			
-							<button id='replyImage'>사진 넣기</button>
 
-						</div>
-					</div>
-				</div>
-			</div>
             
             
             <div class="modal-footer">
@@ -259,7 +239,7 @@
         	 	<button id="modalModBtn" type="button" class="btn btn-warning" data-dismiss="modal">수정하기</button>
            		<button id="modalRemoveBtn" type="button" class="btn btn-danger" data-dismiss="modal">삭제하기</button>
                 <button id="modalRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">등록하기</button>
-                <button id="modalreReplyRegisterBtn" type="button" class="btn btn-primary" data-dismiss="modal">대댓글 등록하기</button>
+                <button id="modalreReplyRegisterBtn" type="button" class="btn btn-primary" data-info="reReplyBtn">대댓글 등록하기</button>
                 <button id="modalCloseBtn" type="button" class="btn btn-default" data-dismiss="modal">창 닫기</button>
             </div>
          </div>
@@ -380,12 +360,12 @@
 				
 				for(var i = 0, len = list.length || 0 ; i < len ; i++){
 					str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
-					str += "<div><div ><strong class='primary-font'>["+list[i].rno+"]"+list[i].id+"</strong>";
+					str += "<div><div><strong class='primary-font'>["+list[i].rno+"]"+list[i].id+"</strong>";
 					str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small></div>";
 					str += "<p>"+list[i].reply+"</p>";
-					str += "<button class='btn btn-warning pull-right' data-info="+list[i].rno+" id='reReplyBtn'>대댓글</button></div></li>";
+					str += "<button class='btn btn-warning pull-right' id='reReplyBtn'>대댓글</button></div></li>";
 				}//end for
-				
+
 				replyUL.html(str);
 				
 				showReplyPage(dto);
@@ -419,6 +399,10 @@
 		//댓글 추가 버튼 클릭
 		$("#addReplyBtn").on("click",function(e){
 			
+			var liObj = $(this).closest("li");
+			
+			$("#myModalLabel")[0].innerHTML = "댓글 작성";
+			
 			modal.find("input").val("");
 			modalInputReplyer.val("<sec:authentication property='principal.username'/>");
 			modalInputReplyDate.closest("div").hide();
@@ -433,11 +417,17 @@
 		$(".chat").on("click","li #reReplyBtn",function(e){
 			e.preventDefault();
 			e.stopPropagation();
-			console.log("대댓글 들어왔음!!");
+			
+			var liObj = $(this).closest("li");
+			
+			$("#myModalLabel")[0].innerHTML = liObj.data("rno")+"번 대댓글 작성";
+			
+			$("#rnoValue").val(liObj.data("rno"));
+			console.log($("#rnoValue").val());
+			
+			reReplyRegisterBtn.attr("data-info",$("#rnoValue").val());
 			
 			var reReplyBtn = $(this);
-			
-			$("#myModalLabel").attr("value",reReplyBtn.data("info")+"번 대댓글 작성");
 			
 			modal.find("input").val("");
 			modalInputReplyer.val("<sec:authentication property='principal.username'/>");
@@ -448,9 +438,34 @@
 			replyImageBtn.show();
 			$("#modal").modal("show");
 		});
+
 		
 		//대댓글 등록 및 목록 갱신
 		reReplyRegisterBtn.on("click",function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			
+			var replyRno = e.target.getAttribute("data-info");
+			console.log(replyRno);
+			
+			var reply = {
+					reply: modalInputReply.val(),
+					id: modalInputReplyer.val(),
+					bno: bnoValue,
+					rno: replyRno,
+					ord: 1
+			};
+			
+ 			replyService.add(reply,function(result){
+				
+				alert(result);
+				
+				modal.find("input").val("");
+				modal.modal("hide");
+				
+				showList(-1);
+			}); 
+			
 			
 		});
 		
@@ -475,7 +490,11 @@
 		
 		//댓글 클릭 이벤트
 		$(".chat").on("click","li",function(e){
+			
 			var rno = $(this).data("rno");
+			
+			var liObj = $(this).closest("li");
+			$("#myModalLabel")[0].innerHTML = rno + "번 댓글 수정";
 			
 			replyService.get(rno,function(reply){
 				

@@ -21,4 +21,5 @@ public interface ReplyService {
 	
 	public int getCountByBno(int bno);
 
+	public int noPrideUpdate(ReplyVO reply);
 }

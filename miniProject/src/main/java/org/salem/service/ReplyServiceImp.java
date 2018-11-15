@@ -59,5 +59,11 @@ public class ReplyServiceImp implements ReplyService{
 		// TODO Auto-generated method stub
 		return mapper.getCountByBno(bno);
 	}
+
+	@Override
+	public int noPrideUpdate(ReplyVO reply) {
+		// TODO Auto-generated method stub
+		return mapper.noPrideUpdate(reply);
+	}
 	
 }

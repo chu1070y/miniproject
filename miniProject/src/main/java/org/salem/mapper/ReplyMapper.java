@@ -20,4 +20,6 @@ public interface ReplyMapper {
 	public ReplyVO replyRead(int rno);
 	
 	public int getCountByBno(int bno);
+	
+	public int noPrideUpdate(ReplyVO reply);
 }

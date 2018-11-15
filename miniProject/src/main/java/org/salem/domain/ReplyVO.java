@@ -14,4 +14,14 @@ public class ReplyVO {
 	private String id;
 	private Date regDate;
 	private Date updateDate;
+	
+	public ReplyVO() {
+		
+		this.rno = 0;
+		this.gno = 0;
+		this.ord = 0;
+	}
+	
+	
+	
 }
