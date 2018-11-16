@@ -8,6 +8,11 @@
 	<insert id="replyInsert">
 		insert into reply(bno,id,reply,gno,ord)
 		values(#{bno},#{id},#{reply},#{rno},#{ord})
+		
+		<selectKey resultType="int" keyProperty="rno" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+		
 	</insert>
 
 	<select id="getreplyList" resultType="org.salem.domain.ReplyVO">
@@ -36,6 +41,6 @@
 	</select>
 	
 	<update id="noPrideUpdate">
-		update reply set gno = rno  where ord = 0
+		update reply set gno = #{rno}  where ord = 0 and rno = #{rno}
 	</update>
 </mapper>

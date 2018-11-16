@@ -38,6 +38,8 @@ public class ReplyController {
 		
 		int insertCount = service.replyInsert(reply);
 		
+		log.info(reply);
+		
 		service.noPrideUpdate(reply);
 
 		return insertCount==1? new ResponseEntity<>("success",HttpStatus.OK)

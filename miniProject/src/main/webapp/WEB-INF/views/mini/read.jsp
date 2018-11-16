@@ -358,13 +358,30 @@
 					return;
 				}//end if
 				
+				console.log("list : " + (list[0].ord==0));
+				
 				for(var i = 0, len = list.length || 0 ; i < len ; i++){
 					str += "<li class='left clearfix' data-rno='"+list[i].rno+"'>";
-					str += "<div><div><strong class='primary-font'>["+list[i].rno+"]"+list[i].id+"</strong>";
-					str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small></div>";
-					str += "<p>"+list[i].reply+"</p>";
-					str += "<button class='btn btn-warning pull-right' id='reReplyBtn'>대댓글</button></div></li>";
+					
+					if(list[i].ord==0){
+						str += "<div><div><strong class='primary-font'>["+list[i].rno+"]"+list[i].id+"</strong>";
+						str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small></div>";
+						str += "<p>"+list[i].reply+"</p>";
+					}else{
+						str += "<div><div><strong class='primary-font'> &nbsp; &nbsp; &nbsp; &nbsp; [대댓글]"+list[i].id+"</strong>";
+						str += "<small class='pull-right text-muted'>"+replyService.displayTime(list[i].regDate)+"</small></div>";
+						str += "<p>  &nbsp; &nbsp; &nbsp; &nbsp; ==> "+list[i].reply+"</p>";
+					}
+					
+					if(list[i].ord==0){
+						str += "<button class='btn btn-warning pull-right' id='reReplyBtn'>대댓글</button>";
+					}
+					
+					str += "</div></li>";
 				}//end for
+				
+				console.log("================================");
+				console.log(str);
 
 				replyUL.html(str);
 				
@@ -463,7 +480,7 @@
 				modal.find("input").val("");
 				modal.modal("hide");
 				
-				showList(-1);
+				showList(0);
 			}); 
 			
 			
